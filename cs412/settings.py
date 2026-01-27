@@ -26,7 +26,8 @@ SECRET_KEY = "django-insecure-nrqqpqfowi)t^mkamndg6njro63w&&m03uyp!c6nhg6c*euh+h
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "cs-webapps.bu.edu",
+    "*",
+   
 ]
 
 
@@ -39,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "quotes",
+    
 ]
 
 MIDDLEWARE = [
@@ -59,6 +62,7 @@ TEMPLATES = [
         "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
+            'string_if_invalid' : 'WARNING: {{%s}} not a valid context variable.',
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",

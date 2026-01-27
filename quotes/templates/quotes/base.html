@@ -1,0 +1,26 @@
+{% load static %}
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="{% url 'homepage' %}"> Quote of the day</a>
+            </li>
+        </ul>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+
+<hr>
+<p>Page created by vroho@bu.edu</p>
+<p>Generated at: {{ current_time }}</p>
+
+</html>
