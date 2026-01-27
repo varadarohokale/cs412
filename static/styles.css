@@ -19,10 +19,18 @@ h5 {
 
 h1 {
     margin: 20px 0 10px;
+    font-size: 1.6em;
+
 }
 
 p {
     margin: 8px 0;
+}
+
+p {
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 a,
@@ -42,6 +50,7 @@ body {
     max-width: 960px;
     margin: 20px auto;
     padding: 20px auto;
+
 }
 
 header {
@@ -237,6 +246,29 @@ img {
     object-fit: contain;
     display: block;
     margin: 16px auto;
+}
+
+.show-all {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.quote-block {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin: 24px 0;
+    background-color: #fff;
+}
+
+/* keep images neat inside each block */
+.quote-block img {
+    display: block;
+    margin: 12px auto;
+    width: 600px;
+    height: 400px;
+    max-width: 100%;
+    object-fit: contain;
+    background-color: #f2f2f2;
 }
 
 /* responsive styles when width is less than 1400px */

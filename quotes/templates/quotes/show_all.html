@@ -1,0 +1,26 @@
+{% extends 'quotes/base.html' %}
+<html>
+
+{% block content %}
+
+<div class="show-all">
+
+    <h1> Quotes by Barack Obama</h1>
+
+    <p>{{ quote1 }}</p>
+    <p>{{ quote2 }}</p>
+    <p>{{ quote3 }}</p>
+
+    <hr>
+
+    <h1> Images of Barack Obama</h1>
+
+    <img src="{{ image1 }}" alt="Quote image">
+    <img src="{{ image2 }}" alt="Quote image">
+    <img src="{{ image3 }}" alt="Quote image">
+
+</div>
+
+{% endblock %}
+
+</html>
