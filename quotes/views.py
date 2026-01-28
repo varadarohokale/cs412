@@ -59,3 +59,15 @@ def show_all(request):
     }
 
     return render (request, template, context)
+
+def about(request):
+
+    template = "quotes/about.html"
+
+    context = {
+    
+        'current_time': time.ctime(),
+    }
+
+    return render (request, template, context)
+
