@@ -31,7 +31,9 @@ def home(request):
     random_quote = random.choice(quotes_list)
     random_image = random.choice(images_list)
 
-    # Build the template context dictionary used by the HTML template.
+    # Build the context dictionary used by the HTML template.
+    # The template uses these values to display a randomly selected
+    # quote and image as well as the current time on the home page.
     context = {
         "quote": random_quote,
         "image": random_image,
@@ -61,14 +63,12 @@ def show_all(request):
         "https://peopleenespanol.com/thmb/q0bbF-NT9jgJLGuCwfM8ZA8EUjA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/obama1-2-f100fd55722140faaff5e4d9bd81990d.jpg",
     ]
 
-    # Map each quote and image to separate context keys for easy use in the template.
+    # Build the context dictionary that is passed to the template.
+    # The template will loop through the quotes list and the image list using a for loop
+    # to dynamically display the quotes and images.
     context = {
-        "quote1": quotes_list[0],
-        "quote2": quotes_list[1],
-        "quote3": quotes_list[2],
-        "image1": images_list[0],
-        "image2": images_list[1],
-        "image3": images_list[2],
+        "quotes": quotes_list,
+        "images": images_list,
         "current_time": time.ctime(),
     }
 

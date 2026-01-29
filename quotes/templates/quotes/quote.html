@@ -8,15 +8,19 @@ quote and image using Django template variables.
 {% extends "quotes/base.html" %}
 
 {% block content %}
-<!-- Main heading for the quote-of-the-day page -->
-<h1>Quote of the Day</h1>
 
-<!-- Display the randomly selected quote -->
-<p>{{ quote }}</p>
+<div class="quote-container">
 
-<!-- Display the randomly selected image -->
-<div class="img-square">
-    <img class="qotd-img" src="{{ image }}" alt="Image of {{ person }}">
+    <!-- Main heading for the quote-of-the-day page -->
+    <h1>Quote of the Day</h1>
+
+    <!-- Display the randomly selected quote -->
+    <p class="quote-text">{{ quote }}</p>
+
+    <!-- Display the randomly selected image -->
+    <div class="img-square">
+        <img class="qotd-img" src="{{ image }}" alt="Image of {{ person }}">
+    </div>
 </div>
 
 {% endblock %}
