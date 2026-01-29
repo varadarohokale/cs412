@@ -1,13 +1,19 @@
-{% extends 'quotes/base.html' %}
-<html>
+<!--
+File: quote.html
+Author: Varada Rohokale (vroho@bu.edu), 1/29/2026
+Description: Display the quote of the day by showing a randomly selected
+quote and corresponding image using Django template variables.
+-->
+
+{% extends "quotes/base.html" %}
 
 {% block content %}
+<!-- Main heading for the quote-of-the-day page -->
+<h1>Quote of the Day</h1>
 
-<h1> Quote of the day</h1>
-<p> {{ quote }} </p>
-<img src="{{ image }}" alt="Quote image">
+<!-- Display the randomly selected quote -->
+<p>{{ quote }}</p>
 
-
+<!-- Display the image associated with the quote -->
+<img src="{{ image }}" alt="Image related to the quote">
 {% endblock %}
-
-</html>

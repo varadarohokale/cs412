@@ -1,31 +1,51 @@
+<!--
+File: base.html
+Author: Varada Rohokale (vroho@bu.edu), 1/29/2026
+Description: Base HTML template for the quotes application. Defines the
+overall page structure, navigation bar, stylesheet inclusion, and a
+content block for child templates to extend.
+-->
+
 {% load static %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+    <!-- Link the main stylesheet used across all pages -->
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 
 <body>
+    <!-- Navigation bar for site-wide page links -->
     <nav>
         <ul>
+            <!-- Link to the home page displaying a random quote -->
             <li>
                 <a href="{% url 'homepage' %}">Quote of the day</a>
             </li>
+
+            <!-- Link to the page displaying all quotes and images -->
             <li>
                 <a href="{% url 'showallpage' %}">Show all</a>
             </li>
+
+            <!-- Link to the about page -->
             <li>
                 <a href="{% url 'aboutpage' %}">About</a>
             </li>
         </ul>
     </nav>
-    {% block content %}
-    {% endblock %}
 
+    <main>
+        <!-- Content block to be overridden by child templates -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer section displaying author and page generation time -->
+    <hr>
+    <p>Page created by vroho@bu.edu</p>
+    <p>Generated at: {{ current_time }}</p>
 </body>
-
-<hr>
-<p>Page created by vroho@bu.edu</p>
-<p>Generated at: {{ current_time }}</p>
 
 </html>

@@ -1,26 +1,34 @@
-{% extends 'quotes/base.html' %}
-<html>
+<!--
+File: show_all.html
+Author: Varada Rohokale (YOUR_BU_EMAIL@bu.edu), 1/29/2026
+Description: Display all available Barack Obama quotes and images on a
+single page using Django template variables.
+-->
+
+{% extends "quotes/base.html" %}
 
 {% block content %}
-
+<!-- Container for displaying all quotes and images -->
 <div class="show-all">
 
-    <h1> Quotes by Barack Obama</h1>
+    <!-- Section heading for the quotes -->
+    <h1>Quotes by Barack Obama</h1>
 
+    <!-- Display each quote passed from the Django view -->
     <p>{{ quote1 }}</p>
     <p>{{ quote2 }}</p>
     <p>{{ quote3 }}</p>
 
+    <!-- Horizontal rule to visually separate sections -->
     <hr>
 
-    <h1> Images of Barack Obama</h1>
+    <!-- Section heading for the images -->
+    <h1>Images of Barack Obama</h1>
 
-    <img src="{{ image1 }}" alt="Quote image">
-    <img src="{{ image2 }}" alt="Quote image">
-    <img src="{{ image3 }}" alt="Quote image">
+    <!-- Display each image passed from the Django view -->
+    <img src="{{ image1 }}" alt="Image of Barack Obama">
+    <img src="{{ image2 }}" alt="Image of Barack Obama">
+    <img src="{{ image3 }}" alt="Image of Barack Obama">
 
 </div>
-
 {% endblock %}
-
-</html>
