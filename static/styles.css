@@ -165,7 +165,7 @@ img {
     }
 }
 
-/* footer area from your <hr> + p tags */
+
 hr {
     border: none;
     border-top: 1px solid var(--border);
@@ -190,4 +190,36 @@ hr+p+p {
         justify-content: center;
         flex-wrap: wrap;
     }
+}
+
+.img-square {
+    width: 520px;
+    /* same size every time */
+    height: 520px;
+    /* same size every time */
+    margin: 16px auto 0;
+
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #e9e4da;
+    box-shadow: var(--shadow);
+}
+
+.img-square>img.qotd-img {
+    width: 520px !important;
+    height: 520px !important;
+    max-width: none !important;
+    max-height: none !important;
+
+    display: block !important;
+
+    object-fit: cover !important;
+    /* crops to fill square */
+    object-position: center 18% !important;
+    /* bias upward for faces */
+
+    margin: 0 !important;
+    border: 0 !important;
+    background: none !important;
 }
