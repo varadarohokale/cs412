@@ -33,7 +33,7 @@ def home(request):
 
     # Build the context dictionary used by the HTML template.
     # The template uses these values to display a randomly selected
-    # quote and image as well as the current time on the home page.
+    # quote and image as well as the current time on the quote page.
     context = {
         "quote": random_quote,
         "image": random_image,

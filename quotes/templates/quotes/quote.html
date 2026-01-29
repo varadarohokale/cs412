@@ -2,11 +2,13 @@
 File: quote.html
 Author: Varada Rohokale (vroho@bu.edu), 1/29/2026
 Description: Display the quote of the day by showing a randomly selected
-quote and image using Django template variables.
+quote and image from views.home.
 -->
 
+<!-- Extend the base template to reuse site wide layout and styling -->
 {% extends "quotes/base.html" %}
 
+<!-- Begin the content block that base.html will insert into the page -->
 {% block content %}
 
 <div class="quote-container">
@@ -19,8 +21,9 @@ quote and image using Django template variables.
 
     <!-- Display the randomly selected image -->
     <div class="img-square">
-        <img class="qotd-img" src="{{ image }}" alt="Image of {{ person }}">
+        <img class="qotd-img" src="{{ image }}" alt="Image of Barack Obama">
     </div>
 </div>
 
 {% endblock %}
+<!-- End the content block -->

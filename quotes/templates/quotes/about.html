@@ -1,13 +1,15 @@
 <!--
 File: about.html
-Author: Varada Rohokale (YOUR_BU_EMAIL@bu.edu), 1/29/2026
-Description: Display an About page describing Barack Obama and the purpose of this
-Django quotes web application.
+Author: Varada Rohokale (vroho@bu.edu), 1/29/2026
+Description: Display an About page with short biographical information about Barack Obama and a note about the author.
 -->
 
+<!-- Extend the base template to reuse site wide layout and styling -->
 {% extends "quotes/base.html" %}
 
+<!-- Begin the content block that base.html will insert into the page -->
 {% block content %}
+
 <!-- Main page heading for the About page content -->
 <div class="about-container">
     <h1>About</h1>
@@ -28,4 +30,6 @@ Django quotes web application.
         static assets.
     </p>
 </div>
+
 {% endblock %}
+<!-- End the content block -->

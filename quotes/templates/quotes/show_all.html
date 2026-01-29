@@ -2,12 +2,15 @@
 File: show_all.html
 Author: Varada Rohokale (vroho@bu.edu), 1/29/2026
 Description: Display all Barack Obama quotes first, followed by all
-images, using Django template for-loops.
+images of him from views.show_all using Django template for-loops.
 -->
 
+<!-- Extend the base template to reuse site wide layout and styling -->
 {% extends "quotes/base.html" %}
 
+<!-- Begin the content block that base.html will insert into the page -->
 {% block content %}
+
 <!-- Container for displaying all quotes and images -->
 <div class="show-all">
 
@@ -28,4 +31,6 @@ images, using Django template for-loops.
     {% endfor %}
 
 </div>
+
 {% endblock %}
+<!-- End the content block -->
