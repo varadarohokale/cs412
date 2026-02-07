@@ -1,0 +1,103 @@
+{% extends 'restaurant/base.html'%}
+{% load static %}
+
+
+{% block content %}
+
+<div>
+    <h1> Order </h1>
+
+    {% if error %}
+    <p style="color:red;"><strong>{{ error }}</strong></p>
+    {% endif %}
+
+    <form method="post" action="{% url 'confirmationpage' %}">
+        {% csrf_token %}
+
+        <input type="hidden" name="daily_special_name" value="{{ daily_special_name }}">
+        <input type="hidden" name="daily_special_description" value="{{ daily_special_description }}">
+
+
+        <h2>Menu</h2>
+
+        <div class="menu-item">
+            <label>
+                <input type="checkbox" name="item" value="farmhouse">
+                <strong>Veggie Farmhouse Pizza ($7.99)</strong>
+            </label>
+
+            <div class="sub-item">
+                Veggie toppings (choose any):<br>
+
+                <label><input type="checkbox" name="options" value="mushrooms"> Mushrooms</label>
+                <label><input type="checkbox" name="options" value="onions"> Onions</label>
+                <label><input type="checkbox" name="options" value="tomatoes"> Tomatoes</label>
+                <label><input type="checkbox" name="options" value="olives"> Olives</label>
+                <label><input type="checkbox" name="options" value="bell_peppers"> Bell Peppers</label>
+            </div>
+        </div>
+
+
+        <div class="menu-item">
+            <label>
+                <input type="checkbox" name="item" value="margarita">
+                <strong>Margarita Pizza ($9.99)</strong>
+            </label>
+        </div>
+
+
+        <div class="menu-item">
+            <label>
+                <input type="checkbox" name="item" value="nystyle">
+                <strong>New York Style Pizza ($11.99)</strong>
+            </label>
+        </div>
+
+
+        <div class="menu-item">
+            <label>
+                <input type="checkbox" name="item" value="dailyspecial">
+                <strong>Daily Special: {{ daily_special_name }} ($13.99)</strong>
+            </label>
+
+            <div class="sub-item">
+                <strong>Description:</strong> {{ daily_special_description }}
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <label for="instructions"><strong>Special instructions:</strong></label>
+
+            <div class="sub-item">
+                <textarea id="instructions" name="instructions" rows="4" cols="50"
+                    placeholder="Allergies, spice level, no onions, etc."></textarea>
+            </div>
+        </div>
+
+
+        <h2> Customer Information </h2>
+
+        <p>
+            <label>Name:</label>
+            <input type="text" name="name">
+        </p>
+
+        <p>
+            <label> Phone:</label>
+            <input type="tel" name="phone">
+        </p>
+
+        <p>
+            <label>Email:</label>
+            <input type="email" name="email">
+        </p>
+
+        <p>
+            <button type="submit">Place Order</button>
+        </p>
+
+
+    </form>
+</div>
+
+{% endblock %}

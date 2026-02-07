@@ -1,0 +1,58 @@
+{% extends "restaurant/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="home">
+    <header class="home-header">
+        <h1>Joey's Pizza</h1>
+        <p class="address">10 Buick St, Boston, MA, 02215</p>
+    </header>
+
+    <div class="hero">
+        <img src="{% static 'pizza.png' %}" alt="A slice of pizza" class="hero-img">
+    </div>
+
+    <section class="hours">
+        <h2>Hours</h2>
+
+        <table class="hours-table">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Hours of Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Monday</td>
+                    <td>9am – 10pm</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td>9am – 10pm</td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td>9am – 10pm</td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td>9am – 10pm</td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td>12pm – 3am</td>
+                </tr>
+                <tr>
+                    <td>Saturday</td>
+                    <td>12pm – 3am</td>
+                </tr>
+                <tr>
+                    <td>Sunday</td>
+                    <td>9am – 10pm</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+{% endblock %}

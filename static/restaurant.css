@@ -1,0 +1,425 @@
+:root {
+
+    --bg: #f6f1ea;
+    --card: #fbfaf7;
+    --text: #2f2f2f;
+    --muted: #6b665c;
+    --border: #ddd6c9;
+    --accent: #8b6f3d;
+
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    --radius: 14px;
+
+    --container: 920px;
+    --pad: 20px;
+    --nav-h: 70px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-padding-top: calc(var(--nav-h) + 18px);
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+    margin: 0;
+}
+
+/* Keep main content reasonably tight */
+main {
+    flex: 1;
+    max-width: var(--container);
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px var(--pad) 22px;
+}
+
+main h1:first-child {
+    margin-top: 0.5rem;
+    /* was effectively ~2rem */
+}
+
+/* Footer should not create huge empty space */
+footer {
+    max-width: var(--container);
+    width: 100%;
+    margin: 0 auto;
+    padding: 10px var(--pad) 18px;
+}
+
+footer p {
+    margin: 6px 0;
+    max-width: none;
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+
+.show-all,
+.quote-container {
+    margin: 1.75rem auto;
+    /* was 3rem */
+    padding: 2rem;
+    /* was 3rem */
+    max-width: 900px;
+    background-color: #faf6f0;
+    border-radius: 12px;
+}
+
+nav {
+    background: #f0ebe2;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 0;
+
+}
+
+nav ul {
+    max-width: var(--container);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--pad);
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 22px;
+
+}
+
+nav a {
+    font-size: 1.05rem;
+
+    color: var(--muted);
+    text-decoration: none;
+    padding: 10px 14px;
+
+    border-radius: 12px;
+}
+
+nav a:hover {
+    color: var(--accent);
+    background: rgba(139, 111, 61, 0.10);
+}
+
+
+
+h1,
+h2 {
+    color: var(--text);
+    letter-spacing: -0.015em;
+}
+
+h1 {
+    color: #1f2933;
+    /* deep neutral */
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
+h3 {
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
+/* Body text */
+p {
+    margin: 10px auto;
+    max-width: 720px;
+    color: #3a3a3a;
+    line-height: 1.7;
+}
+
+.home-header .address {
+    max-width: none;
+
+    margin: 6px 0 22px;
+
+    color: #555;
+    text-align: center;
+}
+
+h1+p {
+    margin-top: 1.5rem;
+}
+
+.card+.card {
+    margin-top: 18px;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* Card container styling */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px;
+}
+
+/* Quote styling */
+.quote {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    margin: 0;
+    color: var(--text);
+}
+
+.quote::before,
+.quote::after {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.attribution {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+/* Image styling */
+img {
+    display: block;
+    width: 100%;
+    max-width: 820px;
+    height: auto;
+    margin: 2rem auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* Grid layout */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Divider styling */
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border);
+    margin: 3rem 0;
+}
+
+hr+p,
+hr+p+p {
+    max-width: var(--container);
+    padding: 0 var(--pad);
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+/* Responsive typography and nav layout */
+@media (max-width: 560px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    nav ul {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+
+.img-square {
+    width: 520px;
+    height: 520px;
+    margin: 16px auto 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #e9e4da;
+    box-shadow: var(--shadow);
+}
+
+.img-square>img.qotd-img {
+    width: 520px !important;
+    height: 520px !important;
+    max-width: none !important;
+    max-height: none !important;
+    display: block !important;
+    object-fit: cover !important;
+    object-position: center 18% !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: none !important;
+}
+
+
+.quote-text {
+    font-size: 1.25rem;
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.6;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.quote-container {
+    background-color: #faf6f0;
+    max-width: 900px;
+    margin: 1.75rem auto;
+    padding: 1.5rem 2rem 2rem;
+
+    border-radius: 12px;
+    text-align: center;
+}
+
+.quote-container h1 {
+    margin-top: 0;
+}
+
+.quote-container p {
+    text-align: center;
+}
+
+/* About page container styling */
+.about-container {
+    background-color: #faf6f0;
+    max-width: 900px;
+    margin: 1.75rem auto;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+}
+
+
+.indent {
+    margin-left: 40px;
+}
+
+.menu-item {
+    margin-bottom: 18px;
+}
+
+.sub-item {
+    margin-left: 32px;
+    margin-top: 6px;
+    color: #555;
+}
+
+.sub-item label {
+    margin-right: 12px;
+    white-space: nowrap;
+}
+
+.menu-item>label {
+    display: inline-block;
+    font-weight: 600;
+}
+
+.home {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 18px;
+    text-align: center;
+}
+
+.home-header {
+    text-align: center;
+}
+
+.home-header h1 {
+    margin: 0;
+}
+
+.hero {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 26px;
+    text-align: center;
+}
+
+.hero-img {
+    width: 100%;
+    max-width: 860px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.hours h2 {
+    margin: 0 0 14px;
+}
+
+.hours-table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    font-size: 1.05rem;
+}
+
+.hours-table th,
+.hours-table td {
+    padding: 6px 18px;
+    text-align: left;
+}
+
+.hours-table th {
+    font-weight: 700;
+}
+
+
+.order-list {
+    margin-top: 10px;
+    padding-left: 22px;
+}
+
+.order-list li {
+    margin-bottom: 6px;
+    font-size: 1.1rem;
+}
+
+
+.price {
+    color: #666;
+    font-weight: 400;
+}
+
+
+.instructions {
+    margin-top: 14px;
+    font-size: 0.95rem;
+    color: #777;
+}
+
+
+.order-summary {
+    margin-top: 14px;
+}
+
+.total {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.ready-time {
+    margin-top: 0;
+    font-size: 1.05rem;
+}

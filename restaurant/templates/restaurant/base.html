@@ -1,0 +1,33 @@
+{% load static %}
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'restaurant.css' %}">
+</head>
+
+<body>
+
+    <nav>
+        <ul>
+            <li>
+                <a href="{% url 'mainpage' %}"> Home </a>
+            </li>
+            <li>
+                <a href="{% url 'orderpage' %}"> Order </a>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+
+        {% block content %}
+
+
+        {% endblock%}
+    </main>
+
+
+</body>
+
+</html>
