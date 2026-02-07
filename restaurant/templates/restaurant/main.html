@@ -1,20 +1,34 @@
+<!--
+File: main.html
+Author: Varada Rohokale (vroho@bu.edu), 2/6/2026
+Description: Homepage for the restaurant web application. Displays the restaurant 
+name, location, image, and hours of operation.
+-->
+
 {% extends "restaurant/base.html" %}
 {% load static %}
 
 {% block content %}
+
+<!-- Main container for homepage content -->
 <div class="home">
+
+    <!-- Header displaying restaurant name and address -->
     <header class="home-header">
         <h1>Joey's Pizza</h1>
         <p class="address">10 Buick St, Boston, MA, 02215</p>
     </header>
 
+    <!-- Pizza image to visually represent the restaurant -->
     <div class="hero">
         <img src="{% static 'pizza.png' %}" alt="A slice of pizza" class="hero-img">
     </div>
 
+    <!-- Section displaying restaurant hours -->
     <section class="hours">
         <h2>Hours</h2>
 
+        <!-- Table listing hours of operation for each day -->
         <table class="hours-table">
             <thead>
                 <tr>
@@ -54,5 +68,7 @@
             </tbody>
         </table>
     </section>
+
 </div>
+
 {% endblock %}

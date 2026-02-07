@@ -1,25 +1,36 @@
-{% extends 'restaurant/base.html'%}
-{% load static %}
+<!--
+File: order.html
+Author: Varada Rohokale (vroho@bu.edu), 2/6/2026
+Description: Displays the online order form where customers can select 
+menu items, provide special instructions, and enter their contact information.
+-->
 
+{% extends 'restaurant/base.html' %}
+{% load static %}
 
 {% block content %}
 
 <div>
-    <h1> Order </h1>
+    <h1>Order</h1>
 
+    <!-- Display error message if form validation fails -->
     {% if error %}
     <p style="color:red;"><strong>{{ error }}</strong></p>
     {% endif %}
 
     <form method="post" action="{% url 'confirmationpage' %}">
+        <!-- Security token required for POST form submission -->
         {% csrf_token %}
 
+        <!-- Hidden fields to preserve daily special information -->
         <input type="hidden" name="daily_special_name" value="{{ daily_special_name }}">
         <input type="hidden" name="daily_special_description" value="{{ daily_special_description }}">
+        <input type="hidden" name="daily_special_price" value="{{ daily_special_price }}">
 
 
         <h2>Menu</h2>
 
+        <!-- Menu item with veggie toppings -->
         <div class="menu-item">
             <label>
                 <input type="checkbox" name="item" value="farmhouse">
@@ -37,14 +48,13 @@
             </div>
         </div>
 
-
+        <!-- Standard menu items -->
         <div class="menu-item">
             <label>
                 <input type="checkbox" name="item" value="margarita">
                 <strong>Margarita Pizza ($9.99)</strong>
             </label>
         </div>
-
 
         <div class="menu-item">
             <label>
@@ -53,11 +63,11 @@
             </label>
         </div>
 
-
+        <!-- Daily special generated dynamically by the view -->
         <div class="menu-item">
             <label>
                 <input type="checkbox" name="item" value="dailyspecial">
-                <strong>Daily Special: {{ daily_special_name }} ($13.99)</strong>
+                <strong>Daily Special: {{ daily_special_name }} (${{ daily_special_price }})</strong>
             </label>
 
             <div class="sub-item">
@@ -65,6 +75,7 @@
             </div>
         </div>
 
+        <!-- Text area for additional customer instructions -->
         <div class="menu-item">
             <label for="instructions"><strong>Special instructions:</strong></label>
 
@@ -74,28 +85,30 @@
             </div>
         </div>
 
+        <h2>Customer Information</h2>
 
-        <h2> Customer Information </h2>
-
+        <!-- Collect customer's name -->
         <p>
             <label>Name:</label>
             <input type="text" name="name">
         </p>
 
+        <!-- Collect customer's phone number -->
         <p>
-            <label> Phone:</label>
+            <label>Phone:</label>
             <input type="tel" name="phone">
         </p>
 
+        <!-- Collect customer's email -->
         <p>
             <label>Email:</label>
             <input type="email" name="email">
         </p>
 
+        <!-- Submit button to place the order -->
         <p>
             <button type="submit">Place Order</button>
         </p>
-
 
     </form>
 </div>

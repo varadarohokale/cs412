@@ -1,3 +1,11 @@
+<!--
+File: base.html
+Author: Varada Rohokale (vroho@bu.edu), 2/6/2026
+Description: Base template for the restaurant web application which dictates the 
+overall layout and structure. Contains a navigation bar and a content block that 
+other templates extend.
+-->
+
 {% load static %}
 
 <html>
@@ -8,25 +16,23 @@
 
 <body>
 
+    <!-- Navigation bar for linking to main pages -->
     <nav>
         <ul>
             <li>
-                <a href="{% url 'mainpage' %}"> Home </a>
+                <a href="{% url 'mainpage' %}">Home</a>
             </li>
             <li>
-                <a href="{% url 'orderpage' %}"> Order </a>
+                <a href="{% url 'orderpage' %}">Order</a>
             </li>
         </ul>
     </nav>
 
+    <!-- Block where child templates substitute their content -->
     <main>
-
         {% block content %}
-
-
-        {% endblock%}
+        {% endblock %}
     </main>
-
 
 </body>
 
