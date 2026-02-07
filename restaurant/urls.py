@@ -11,7 +11,7 @@ from django.conf.urls.static import static
 
 # URL patterns that connect webpage routes to their view functions
 urlpatterns = [
-    path("", views.main, name="mainpage"),
+    path("main/", views.main, name="mainpage"),
     path("order/", views.order, name="orderpage"),
     path("confirmation/", views.confirmation, name="confirmationpage"),
 ]
