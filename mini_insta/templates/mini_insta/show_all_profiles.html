@@ -1,0 +1,26 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+
+<section class="profiles-header">
+    <h1 class="page-title">All Profiles</h1>
+</section>
+
+<section class="profiles-grid">
+    {% for profile in profiles %}
+
+    <a class="profile-card" href="{% url 'show_profile' profile.pk %}">
+
+        <img class="profile-thumb" src="{{ profile.profile_image_url }}" alt="{{ profile.username }} profile photo">
+
+        <div class="profile-card-body">
+            <div class="profile-handle">@{{ profile.username }}</div>
+            <div class="profile-name">{{ profile.display_name }}</div>
+        </div>
+
+    </a>
+
+    {% endfor %}
+</section>
+
+{% endblock %}

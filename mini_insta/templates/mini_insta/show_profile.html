@@ -1,0 +1,43 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+
+<section class="card">
+    <div class="profile-header">
+
+        <!-- Avatar -->
+        <div class="avatar-col">
+            <img class="avatar" src="{{ profile.profile_image_url }}" alt="{{ profile.username }} profile photo">
+        </div>
+
+        <!-- Info -->
+        <div class="info-col">
+
+            <div class="username-row">
+                <h1 class="handle">@{{ profile.username }}</h1>
+            </div>
+
+            <!-- Instagram-style stats placeholders -->
+            <div class="stats">
+                <div class="stat"><span class="stat-num">—</span> posts</div>
+                <div class="stat"><span class="stat-num">—</span> followers</div>
+                <div class="stat"><span class="stat-num">—</span> following</div>
+            </div>
+
+            <div class="bio-block">
+                <div class="display-name">{{ profile.display_name }}</div>
+
+                {% if profile.bio_text %}
+                <div class="bio">{{ profile.bio_text }}</div>
+                {% endif %}
+
+                <div class="meta muted">
+                    Joined {{ profile.join_date }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
