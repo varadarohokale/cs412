@@ -1,10 +1,21 @@
-from django.conf import settings
+# File: urls.py
+# Author: Varada Rohokale (vroho@bu.edu), 2/13/2026
+# Description: Defines URL patterns for the mini_insta application,
+# including routes for displaying all profiles and for displaying
+# a single profile.
+
+
 from django.urls import path
-from . import views 
-from django.conf.urls.static import static 
 from .views import ProfileListView, ProfileDetailView
 
-urlpatterns=[
-    path('', ProfileListView.as_view() , name="show_all_profiles"),
-    path('profile/<int:pk>', ProfileDetailView.as_view(), name="show_profile")
+
+# define URL patterns that map browser requests to view classes.
+urlpatterns = [
+
+    # route the default URL '' to the ProfileListView
+    path( "", ProfileListView.as_view(), name="show_all_profiles"),
+
+    # route profile/<int:pk> to the ProfileDetailView
+    # the primary key pk determines which profile to display
+    path( "profile/<int:pk>", ProfileDetailView.as_view(), name="show_profile",),
 ]

@@ -160,6 +160,7 @@ a {
     background: var(--card);
     border-bottom: 1px solid var(--border);
     z-index: 10;
+    padding: 10px 0;
 }
 
 .topbar-inner {
@@ -170,8 +171,12 @@ a {
 }
 
 .brand {
+    margin: 0;
+    /* removes default h1 spacing */
+    font-size: 18px;
+    /* smaller header title */
     font-weight: 700;
-    letter-spacing: 0.2px;
+    line-height: 1;
 }
 
 .topnav-link {

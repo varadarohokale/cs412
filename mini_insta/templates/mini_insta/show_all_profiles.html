@@ -1,26 +1,47 @@
-{% extends 'mini_insta/base.html' %}
+<!--
+    File: show_all_profiles.html
+    Author: Varada Rohokale (vroho@bu.edu), 2/13/2026
+    Description: Displays all Profile records in a grid layout.
+    Each profile shows the username, display name, and profile
+    image. Clicking a profile navigates to the detail page.
+-->
+
+{% extends "mini_insta/base.html" %}
 
 {% block content %}
 
+<!-- Page heading section -->
 <section class="profiles-header">
     <h1 class="page-title">All Profiles</h1>
 </section>
 
+<!-- Grid layout displaying all profile records -->
 <section class="profiles-grid">
+
+    <!-- Loop through each Profile object passed from the view -->
     {% for profile in profiles %}
 
+    <!-- Clickable card linking to the profile detail page -->
     <a class="profile-card" href="{% url 'show_profile' profile.pk %}">
 
+        <!-- Profile image thumbnail -->
         <img class="profile-thumb" src="{{ profile.profile_image_url }}" alt="{{ profile.username }} profile photo">
 
+        <!-- Profile text information -->
         <div class="profile-card-body">
-            <div class="profile-handle">@{{ profile.username }}</div>
-            <div class="profile-name">{{ profile.display_name }}</div>
+            <div class="profile-handle">
+                @{{ profile.username }}
+            </div>
+
+            <div class="profile-name">
+                {{ profile.display_name }}
+            </div>
         </div>
 
     </a>
 
     {% endfor %}
+
 </section>
 
 {% endblock %}

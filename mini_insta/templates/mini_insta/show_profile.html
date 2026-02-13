@@ -1,42 +1,70 @@
-{% extends 'mini_insta/base.html' %}
+<!--
+    File: show_profile.html
+    Author: Varada Rohokale (vroho@bu.edu), 2/13/2026
+    Description: Displays a single Profile record. The page shows a
+    larger profile image, the username, display name, user's
+    bio, and the join date. Placeholder sections are
+    included for future follower/following/post counts.
+-->
+
+{% extends "mini_insta/base.html" %}
 
 {% block content %}
 
+<!-- Profile card containing the user’s main profile information -->
 <section class="card">
     <div class="profile-header">
 
-        <!-- Avatar -->
+        <!-- Display the user's profile image at a larger size -->
         <div class="avatar-col">
             <img class="avatar" src="{{ profile.profile_image_url }}" alt="{{ profile.username }} profile photo">
         </div>
 
-        <!-- Info -->
+        <!-- Display the user’s text information and placeholders -->
         <div class="info-col">
 
+            <!-- Show the user's username as the primary heading -->
             <div class="username-row">
                 <h1 class="handle">@{{ profile.username }}</h1>
             </div>
 
-            <!-- Instagram-style stats placeholders -->
+            <!-- Placeholder counts for future assignment parts -->
             <div class="stats">
-                <div class="stat"><span class="stat-num">—</span> posts</div>
-                <div class="stat"><span class="stat-num">—</span> followers</div>
-                <div class="stat"><span class="stat-num">—</span> following</div>
-            </div>
+                <div class="stat">
+                    <span class="stat-num">—</span> posts
+                </div>
 
-            <div class="bio-block">
-                <div class="display-name">{{ profile.display_name }}</div>
+                <div class="stat">
+                    <span class="stat-num">—</span> followers
+                </div>
 
-                {% if profile.bio_text %}
-                <div class="bio">{{ profile.bio_text }}</div>
-                {% endif %}
-
-                <div class="meta muted">
-                    Joined {{ profile.join_date }}
+                <div class="stat">
+                    <span class="stat-num">—</span> following
                 </div>
             </div>
 
+            <!-- Show the user's display name, bio, and join date -->
+            <div class="bio-block">
+
+                <!-- Display name -->
+                <div class="display-name">
+                    {{ profile.display_name }}
+                </div>
+
+                <!-- User bio -->
+                <div class="bio">
+                    {{ profile.bio_text }}
+                </div>
+
+                <!-- Display the timestamp for when the user joined -->
+                <div class="meta muted">
+                    Joined {{ profile.join_date }}
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 </section>
 
