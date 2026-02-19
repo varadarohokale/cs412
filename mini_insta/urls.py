@@ -6,7 +6,7 @@
 
 
 from django.urls import path
-from .views import ProfileListView, ProfileDetailView
+from .views import *
 
 
 # define URL patterns that map browser requests to view classes.
@@ -18,4 +18,5 @@ urlpatterns = [
     # route profile/<int:pk> to the ProfileDetailView
     # the primary key pk determines which profile to display
     path( "profile/<int:pk>", ProfileDetailView.as_view(), name="show_profile",),
+    path("post/<int:pk>", PostDetailView.as_view(), name="show_post"),
 ]

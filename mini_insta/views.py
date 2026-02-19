@@ -5,7 +5,7 @@
 # the mini_insta application.
 
 from django.views.generic import ListView, DetailView
-from .models import Profile
+from .models import *
 
 
 class ProfileListView(ListView):
@@ -32,6 +32,13 @@ class ProfileDetailView(DetailView):
 
     # name used to reference the object in the template
     context_object_name = "profile"
+
+class PostDetailView(DetailView):
+
+    model = Post
+    template_name = 'mini_insta/show_post.html'
+    context_object_name = "post"
+
 
 
 

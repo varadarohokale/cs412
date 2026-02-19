@@ -1,0 +1,19 @@
+{% extends 'mini_insta/base.html' %}
+<html>
+
+{% block content %}
+
+<div>
+    {% for photo in post.get_all_photos %}
+    <img src="{{photo.image_url}}" alt="Post photo">
+    {% endfor %}
+</div>
+
+<div>
+    <p>{{post.caption}}</p>
+    <p>{{post.timestamp}}</p>
+</div>
+
+{% endblock %}
+
+</html>

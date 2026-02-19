@@ -66,6 +66,19 @@
         </div>
 
     </div>
+    <div>
+        {% for post in profile.get_all_posts %}
+
+        <a href="{% url 'show_post' post.pk %}">
+            {% if post.photos.first %}
+            <img src="{{ post.photos.first.image_url }}" alt="Post image">
+            {% else %}
+            <img src="/static/images/no-image.png" alt="No image available">
+            {% endif %}
+        </a>
+
+        {% endfor %}
+    </div>
 </section>
 
 {% endblock %}
