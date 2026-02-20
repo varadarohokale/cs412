@@ -56,7 +56,7 @@ class Photo(models.Model):
 
     post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="photos")
     image_url = models.URLField(blank=True)
-    timestamp = models.DateTimeField(blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.post},{self.image_url}, {self.timestamp}"

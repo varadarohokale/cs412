@@ -8,6 +8,7 @@
 -->
 
 {% extends "mini_insta/base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -66,19 +67,20 @@
         </div>
 
     </div>
-    <div>
+    <div class="posts-grid">
         {% for post in profile.get_all_posts %}
 
-        <a href="{% url 'show_post' post.pk %}">
+        <a class="post-tile" href="{% url 'show_post' post.pk %}">
             {% if post.photos.first %}
-            <img src="{{ post.photos.first.image_url }}" alt="Post image">
+            <img class="post-img" src="{{ post.photos.first.image_url }}" alt="Post image">
             {% else %}
-            <img src="/static/images/no-image.png" alt="No image available">
+            <img class="post-img" src="{% static 'no-image.png' %}" alt="No image available">
             {% endif %}
         </a>
 
         {% endfor %}
     </div>
+
 </section>
 
 {% endblock %}

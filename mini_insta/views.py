@@ -4,8 +4,11 @@
 # records and for displaying the details of a single Profile within
 # the mini_insta application.
 
-from django.views.generic import ListView, DetailView
-from .models import *
+from django.views.generic import ListView, DetailView, CreateView
+# from .models import *
+from .forms import *
+from django.urls import reverse 
+
 
 
 class ProfileListView(ListView):
@@ -39,6 +42,40 @@ class PostDetailView(DetailView):
     template_name = 'mini_insta/show_post.html'
     context_object_name = "post"
 
+class CreatePostView(CreateView):
+
+    form_class = CreatePostForm
+    template_name = "mini_insta/create_post_form.html"
+
+    def get_context_data(self):
+
+        context = super().get_context_data()
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        context['profile']= profile
+
+        return context 
+
+    def form_valid(self,form):
+
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        form.instance.profile = profile
+
+        image_url = form.cleaned_data["image_url"]
+        Photo.objects.create(post=self.object, image_url=image_url)
+
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        '''Provide a URL to redirect to after creating a new Comment.'''
+ 
+
+        pk = self.kwargs['pk']
+        # call reverse to generate the URL for this Article
+        return reverse('post', kwargs={'pk':pk})
+ 
+ 
 
 
 

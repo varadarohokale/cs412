@@ -40,6 +40,13 @@
         <a class="footer-link" href="{% url 'show_all_profiles' %}">
             Show All Profiles
         </a>
+        {% if profile %}
+        <nav>
+            <ul>
+                <li> <a href="{% url 'create_post' profile.pk %}">Create Post</a></li>
+            </ul>
+        </nav>
+        {% endif %}
     </footer>
 
 </body>

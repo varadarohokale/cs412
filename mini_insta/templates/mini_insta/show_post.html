@@ -1,19 +1,40 @@
-{% extends 'mini_insta/base.html' %}
-<html>
+{% extends "mini_insta/base.html" %}
 
 {% block content %}
+<div class="card post-detail">
 
-<div>
-    {% for photo in post.get_all_photos %}
-    <img src="{{photo.image_url}}" alt="Post photo">
-    {% endfor %}
+    <div class="post-media">
+
+        <div class="post-carousel">
+            {% for photo in post.photos.all %}
+            <div class="post-slide">
+                <img class="post-detail-img" src="{{ photo.image_url }}" alt="Post photo {{ forloop.counter }}">
+            </div>
+            {% empty %}
+            <div class="post-slide">
+                <div class="no-photo">No images</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if post.photos.count > 1 %}
+        <div class="dots">
+            {% for _ in post.photos.all %}
+            <span class="dot"></span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% if post.caption %}
+    <div class="post-caption">{{ post.caption }}</div>
+    {% endif %}
+    <div class="post-time muted">{{ post.timestamp }}</div>
+
+    <div class="post-detail-actions">
+        <a class="btn btn-outline" href="{% url 'show_profile' post.profile.pk %}">Back to profile</a>
+    </div>
+
 </div>
-
-<div>
-    <p>{{post.caption}}</p>
-    <p>{{post.timestamp}}</p>
-</div>
-
 {% endblock %}
-
-</html>
