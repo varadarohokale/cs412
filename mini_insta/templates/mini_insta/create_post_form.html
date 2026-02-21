@@ -1,28 +1,53 @@
+<!--
+    File: create_post_form.html
+    Author: Varada Rohokale (vroho@bu.edu), 2/20/2026
+    Description: Template for creating a new Post. Collects a
+    caption and image URL and submits the form to
+    create a Post and associated Photo.
+-->
+
 {% extends "mini_insta/base.html" %}
 
 {% block content %}
+
+<!-- Card container for create post form -->
 <div class="post-form-card">
 
     <h2>Create Post</h2>
 
+    <!-- Form submits POST data to create_post view -->
     <form method="POST" action="{% url 'create_post' profile.pk %}">
-        {% csrf_token %}
 
+        {% csrf_token %}
+        <!-- CSRF token required for secure POST submission -->
+
+        <!-- Caption field -->
         <div class="form-group">
             <label>Caption</label>
             {{ form.caption }}
         </div>
 
+        <!-- Image URL field -->
         <div class="form-group">
-            <label>Image URL</label>
+            <label for="id_image_url">Image URL</label>
             {{ form.image_url }}
         </div>
 
+        <!-- Submit and Cancel buttons -->
         <div class="form-buttons">
-            <button type="submit" class="btn-primary">Submit</button>
-            <a href="{% url 'show_profile' profile.pk %}" class="btn-secondary">Cancel</a>
+
+            <button type="submit" class="btn-primary">
+                Submit
+            </button>
+
+            <!-- Cancel returns to profile page -->
+            <a href="{% url 'show_profile' profile.pk %}" class="btn-secondary">
+                Cancel
+            </a>
+
         </div>
 
     </form>
 </div>
+
 {% endblock %}

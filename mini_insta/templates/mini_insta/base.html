@@ -2,51 +2,59 @@
     File: base.html
     Author: Varada Rohokale (vroho@bu.edu), 2/13/2026
     Description: Base template for the mini_insta application.
-    Provides the standard HTML structure, links to CSS, and defines
-    a header, footer, and content block for inherited templates.
+    Provides the shared layout, header, bottom
+    navigation, and content block for child templates.
 -->
 
 {% load static %}
 
-
 <html>
 
 <head>
+
     <title>mini_insta</title>
+
     <!-- Link the external stylesheet for consistent styling -->
     <link rel="stylesheet" href="{% static 'mini_insta.css' %}">
 </head>
 
 <body>
 
-    <!-- Header section with navigation links -->
+    <!-- Header section -->
     <header class="topbar">
         <div class="container topbar-inner">
-            <!-- Application title -->
+            <!-- Application title links back to profiles -->
             <h1 class="brand">
-                miniInsta
+                <a href="{% url 'show_all_profiles' %}">
+                    miniInsta
+                </a>
             </h1>
         </div>
     </header>
 
-    <!-- Main content area to be substituted by child templates -->
+    <!-- Main content area -->
     <main class="container page">
         {% block content %}
         {% endblock %}
     </main>
 
-    <!-- Footer required for navigation and testing -->
-    <footer class="footer">
-        <a class="footer-link" href="{% url 'show_all_profiles' %}">
-            Show All Profiles
-        </a>
-        {% if profile %}
-        <nav>
-            <ul>
-                <li> <a href="{% url 'create_post' profile.pk %}">Create Post</a></li>
-            </ul>
-        </nav>
-        {% endif %}
+    <!-- Bottom navigation bar -->
+    <footer class="bottom-nav">
+        <div class="bottom-nav-inner">
+
+            <!-- Link to view all profiles -->
+            <a class="bottom-nav-link" href="{% url 'show_all_profiles' %}">
+                Show All Profiles
+            </a>
+
+            <!-- Only show Create Post when viewing a profile -->
+            {% if profile %}
+            <a class="bottom-nav-link primary" href="{% url 'create_post' profile.pk %}">
+                Create Post
+            </a>
+            {% endif %}
+
+        </div>
     </footer>
 
 </body>

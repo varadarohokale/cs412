@@ -3,7 +3,7 @@
     Author: Varada Rohokale (vroho@bu.edu), 2/13/2026
     Description: Displays a single Profile record. The page shows a
     larger profile image, the username, display name, user's
-    bio, and the join date. Placeholder sections are
+    bio, the join date and posts. Placeholder sections are
     included for future follower/following/post counts.
 -->
 
@@ -67,19 +67,33 @@
         </div>
 
     </div>
+
+    <!-- Grid of posts for this profile -->
     <div class="posts-grid">
+
         {% for post in profile.get_all_posts %}
 
+        <!-- Each post tile links to its detail page -->
         <a class="post-tile" href="{% url 'show_post' post.pk %}">
-            {% if post.photos.first %}
-            <img class="post-img" src="{{ post.photos.first.image_url }}" alt="Post image">
+
+            {% with post.photos.first as first_photo %}
+
+            {% if first_photo %}
+            <!-- Display first associated photo -->
+            <img class="post-img" src="{{ first_photo.image_url }}" alt="Post image">
             {% else %}
+            <!-- Display placeholder if no photo exists -->
             <img class="post-img" src="{% static 'no-image.png' %}" alt="No image available">
             {% endif %}
+
+            {% endwith %}
+
         </a>
 
         {% endfor %}
+
     </div>
+
 
 </section>
 

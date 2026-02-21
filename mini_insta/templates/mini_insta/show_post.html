@@ -1,24 +1,42 @@
+<!--
+    File: show_post.html
+    Author: Varada Rohokale (vroho@bu.edu), 2/20/2026
+    Description: Display a single Post, including its caption,
+    timestamp, and all associated Photos.
+-->
+
 {% extends "mini_insta/base.html" %}
+{% load static %}
 
 {% block content %}
+
+<!-- Post detail card -->
 <div class="card post-detail">
 
+    <!-- Media section (all photos for this post) -->
     <div class="post-media">
 
+        <!-- Horizontal scroll container for multiple photos -->
         <div class="post-carousel">
             {% for photo in post.photos.all %}
+
             <div class="post-slide">
                 <img class="post-detail-img" src="{{ photo.image_url }}" alt="Post photo {{ forloop.counter }}">
             </div>
+
             {% empty %}
+
+            <!-- If the post has no photos, show a placeholder -->
             <div class="post-slide">
-                <div class="no-photo">No images</div>
+                <img class="post-detail-img" src="{% static 'images/no-image.png' %}" alt="No image available">
             </div>
+
             {% endfor %}
         </div>
 
+        <!-- Dots indicate there are multiple photos in this post -->
         {% if post.photos.count > 1 %}
-        <div class="dots">
+        <div class="dots" aria-hidden="true">
             {% for _ in post.photos.all %}
             <span class="dot"></span>
             {% endfor %}
@@ -27,14 +45,21 @@
 
     </div>
 
+    <!-- Caption appears below the media -->
     {% if post.caption %}
     <div class="post-caption">{{ post.caption }}</div>
     {% endif %}
+
+    <!-- Timestamp appears below the caption -->
     <div class="post-time muted">{{ post.timestamp }}</div>
 
+    <!-- Navigation back to the profile page -->
     <div class="post-detail-actions">
-        <a class="btn btn-outline" href="{% url 'show_profile' post.profile.pk %}">Back to profile</a>
+        <a class="btn btn-outline" href="{% url 'show_profile' post.profile.pk %}">
+            Back to profile
+        </a>
     </div>
 
 </div>
+
 {% endblock %}

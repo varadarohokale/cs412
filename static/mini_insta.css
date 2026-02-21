@@ -139,6 +139,7 @@ a {
 .page {
     padding: 32px 0;
     flex: 1;
+    padding-bottom: 90px;
 }
 
 .muted {
@@ -512,36 +513,6 @@ a {
     background: #fff;
 }
 
-
-.multi-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgba(0, 0, 0, 0.65);
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-    z-index: 2;
-}
-
-/* Hint: "Scroll →" */
-.scroll-hint {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-    z-index: 2;
-}
-
-
 .dots {
     display: flex;
     justify-content: center;
@@ -576,7 +547,53 @@ a {
 }
 
 
+.bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
+    background: #fff;
+    border-top: 1px solid var(--border);
+    z-index: 20;
+}
+
+/* Centered nav contents */
+.bottom-nav-inner {
+    width: min(980px, 92vw);
+    margin: 0 auto;
+    padding: 12px 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    align-items: center;
+}
+
+/* Links */
+.bottom-nav-link {
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.bottom-nav-link:hover {
+    background: #f3f3f3;
+}
+
+.bottom-nav-link.primary {
+    background: var(--blue);
+    color: #fff;
+    border-color: transparent;
+}
+
+.bottom-nav-link.primary:hover {
+    background: #007fd6;
+}
 
 
 @media (max-width: 700px) {
