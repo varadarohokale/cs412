@@ -1,0 +1,43 @@
+<!--
+    File: search.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/1/2026
+    Description: Display a search form for searching Profiles and Posts.
+    This page collects a text query and submits it via GET so the query
+    appears in the URL and can be used by the SearchView ListView.
+-->
+
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+
+<!-- Card container to visually separate the search form from the page background. -->
+<div class="post-form-card">
+    <h2>Search</h2>
+
+    <!-- Use GET (not POST) because this is not modifying data; it retrieves results.
+         GET also places the query in the URL, making it easy to refresh/share results. -->
+    <form method="GET" action="{% url 'search' profile.pk %}">
+
+        <!-- Input section: collect the user's query string. -->
+        <div class="form-group">
+
+            <!-- The label is linked to the input via for/id for accessibility. -->
+            <label for="id_query">Search</label>
+
+            <!-- name="query" must match what the SearchView checks in request.GET. -->
+            <input type="text" name="query" id="id_query" placeholder="Search profiles or posts..." required>
+        </div>
+
+        <!-- Action buttons: submit the search or cancel back to the profile page. -->
+        <div class="form-buttons">
+            <button type="submit" class="btn-primary">Search</button>
+
+            <!-- Cancel uses a normal link because no data should be submitted. -->
+            <a href="{% url 'show_profile' profile.pk %}" class="btn-secondary">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -486,7 +486,6 @@ a {
     background: #fff;
 }
 
-/* Hide scrollbar (optional) */
 .post-carousel::-webkit-scrollbar {
     height: 8px;
 }
@@ -595,6 +594,21 @@ a {
     background: #007fd6;
 }
 
+
+.feed-post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+}
 
 @media (max-width: 700px) {
     .profile-header {

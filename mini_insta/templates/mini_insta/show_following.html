@@ -1,0 +1,41 @@
+<!--
+    File: show_following.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/1/2026
+    Description: Display all Profiles that this Profile is following.
+    This page uses Profile accessor methods to retrieve the list of
+    followed Profiles (publishers) and display each as a link.
+-->
+
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+
+<!-- Page title: indicate which Profile's "following" list is displayed. -->
+<h2>{{ profile.display_name|default:profile.username }} is following</h2>
+
+<!-- If-statement is necessary to handle the empty case (following nobody). -->
+{% if profile.get_following %}
+
+<!-- Display followed Profiles as a simple list of links. -->
+<ul>
+    <!-- Loop is necessary to display each followed Profile. -->
+    {% for p in profile.get_following %}
+    <li>
+        <a href="{% url 'show_profile' p.pk %}">
+            {{ p.display_name|default:p.username }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- Empty-state message shown when the following list is empty. -->
+{% else %}
+<p>Not following anyone yet.</p>
+{% endif %}
+
+<!-- Navigation back to the Profile page for this user. -->
+<a class="btn btn-outline" href="{% url 'show_profile' profile.pk %}">
+    Back to profile
+</a>
+
+{% endblock %}

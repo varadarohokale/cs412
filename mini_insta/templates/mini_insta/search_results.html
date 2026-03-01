@@ -1,0 +1,108 @@
+<!--
+    File: search_results.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/1/2026
+    Description: Display search results for matching 
+    Profiles and Posts.
+-->
+
+{% extends "mini_insta/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Header section for the results page, including a link to start a new search. -->
+<div class="feed-header">
+
+    <!-- If a query is present, display it in the heading for user clarity. -->
+    <h2>Results{% if query %}: "{{ query }}"{% endif %}</h2>
+
+    <!-- Link back to the search form (GET request with no query parameter). -->
+    <a class="btn btn-outline" href="{% url 'search' profile.pk %}">
+        New search
+    </a>
+</div>
+
+
+<!-- Profile results section -->
+<h3>Matching Profiles</h3>
+
+<!-- Loop is necessary to display each Profile that matches the query. -->
+{% for p in profiles %}
+<div class="card">
+
+    <!-- Link to the Profile detail page for the selected matching Profile. -->
+    <a href="{% url 'show_profile' p.pk %}">
+        <strong>@{{ p.username }}</strong>
+
+        <!-- Only display display_name if it exists to avoid empty text. -->
+        {% if p.display_name %} — {{ p.display_name }}{% endif %}
+    </a>
+
+    <!-- Only display bio text if it exists to avoid empty blocks. -->
+    {% if p.bio_text %}
+    <div class="muted">{{ p.bio_text }}</div>
+    {% endif %}
+</div>
+
+<!-- If no profiles matched the query, display a helpful message. -->
+{% empty %}
+<p class="muted">No matching profiles.</p>
+{% endfor %}
+
+
+<!-- Post results section  -->
+<h3>Matching Posts</h3>
+
+<!-- Loop is necessary to display each Post that matches the query. -->
+{% for post in posts %}
+<div class="card post-detail">
+
+    <!-- Post header: show the author’s profile image and name. -->
+    <div class="feed-post-header">
+        <img class="profile-pic" src="{{ post.profile.profile_image_url }}" alt="Profile image">
+
+        <div>
+            <!-- Link to the author's Profile page for easy navigation. -->
+            <a href="{% url 'show_profile' post.profile.pk %}">
+                <strong>
+                    {{ post.profile.display_name|default:post.profile.username }}
+                </strong>
+            </a>
+
+            <!-- Timestamp helps users understand recency of the post. -->
+            <div class="muted">{{ post.timestamp }}</div>
+        </div>
+    </div>
+
+    <!-- Post media: show the first Photo if available; otherwise show a placeholder. -->
+    <div class="post-media">
+
+        <!-- If the Post has at least one Photo, show the first image. -->
+        {% if post.photos.first %}
+        <img class="post-detail-img" src="{{ post.photos.first.get_image_url }}" alt="Post image">
+
+        <!-- Otherwise, show a default placeholder image. -->
+        {% else %}
+        <img class="post-detail-img" src="{% static 'no-image.png' %}" alt="No image available">
+        {% endif %}
+    </div>
+
+    <!-- Only display caption if it exists to avoid empty space. -->
+    {% if post.caption %}
+    <div class="post-caption">{{ post.caption }}</div>
+    {% endif %}
+
+    <!-- Link to the full Post detail view. -->
+    <div class="post-detail-actions">
+        <a class="btn btn-outline" href="{% url 'show_post' post.pk %}">
+            View post
+        </a>
+    </div>
+</div>
+
+<!-- If no posts matched the query, display a helpful message. -->
+{% empty %}
+<p class="muted">No matching posts.</p>
+{% endfor %}
+
+{% endblock %}

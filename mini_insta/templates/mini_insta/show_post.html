@@ -45,12 +45,42 @@
 
     </div>
 
-    <!-- Caption appears below the media -->
+    <!-- Show like count -->
+    {% with likes=post.get_likes %}
+    {% if likes.count > 0 %}
+    {% with first_like=likes.first %}
+    <div class="likes-line">
+        Liked by <strong>@{{ first_like.profile.username }}</strong>
+        {% if likes.count > 1 %}
+        and <strong>{{ likes.count|add:"-1" }} others</strong>
+        {% endif %}
+    </div>
+    {% endwith %}
+    {% else %}
+    <div class="likes-line muted">Be the first to like this</div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Caption appears below the like count -->
     {% if post.caption %}
     <div class="post-caption">{{ post.caption }}</div>
     {% endif %}
 
-    <!-- Timestamp appears below the caption -->
+    <div class="post-comments">
+        <h3>Comments</h3>
+
+        {% for c in post.get_all_comments %}
+        <div class="comment">
+            <strong>{{ c.profile.display_name|default:c.profile.username }}</strong>
+            <span class="muted">{{ c.timestamp }}</span>
+            <p>{{ c.text }}</p>
+        </div>
+        {% empty %}
+        <p class="muted">No comments yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Timestamp appears below the comments -->
     <div class="post-time muted">{{ post.timestamp }}</div>
 
     <!-- Navigation back to the profile page, update or delete post  -->

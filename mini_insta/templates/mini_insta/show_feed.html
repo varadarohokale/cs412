@@ -1,0 +1,112 @@
+<!--
+    File: show_feed.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/1/2026
+    Description: Display a post feed for a Profile. Shows posts from
+    profiles this user is following, ordered newest-first.
+    Each feed item displays: author info, first photo, likes, caption,
+    comments, and a link to the full post page.
+-->
+
+{% extends "mini_insta/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page heading for the feed view. -->
+<div class="feed-header">
+    <h2>Feed</h2>
+</div>
+
+<!-- Loop through all Posts returned by PostFeedListView.get_queryset(). -->
+{% for post in posts %}
+<div class="card post-detail">
+
+
+    <!-- Display the author’s profile image, name, and post timestamp. -->
+    <div class="feed-post-header">
+        <img class="profile-pic" src="{{ post.profile.profile_image_url }}" alt="Profile image">
+
+        <div>
+            <!-- Link to the author’s Profile page for navigation. -->
+            <a href="{% url 'show_profile' post.profile.pk %}">
+                <strong>
+                    {{ post.profile.display_name|default:post.profile.username }}
+                </strong>
+            </a>
+
+            <!-- Timestamp provides context for recency in the feed. -->
+            <div class="muted">{{ post.timestamp }}</div>
+        </div>
+    </div>
+
+    <!-- Show the first photo if one exists; otherwise show a placeholder. -->
+    <div class="post-media">
+        {% if post.photos.first %}
+        <img class="post-detail-img" src="{{ post.photos.first.get_image_url }}" alt="Post image">
+        {% else %}
+        <img class="post-detail-img" src="{% static 'no-image.png' %}" alt="No image available">
+        {% endif %}
+    </div>
+
+    <!-- Use a temporary variable so we can reuse the likes QuerySet.
+         This avoids repeating post.get_likes and keeps templates readable. -->
+    {% with likes=post.get_likes %}
+
+    <!-- If likes exist, display "Liked by @user and N others".
+             Otherwise display a helpful empty-state message. -->
+    {% if likes.count > 0 %}
+    {% with first_like=likes.first %}
+    <div class="likes-line">
+        Liked by <strong>@{{ first_like.profile.username }}</strong>
+
+        <!-- Only show "and N others" when there is more than one like. -->
+        {% if likes.count > 1 %}
+        and <strong>{{ likes.count|add:"-1" }} others</strong>
+        {% endif %}
+    </div>
+    {% endwith %}
+    {% else %}
+    <div class="likes-line muted">Be the first to like this</div>
+    {% endif %}
+    {% endwith %}
+
+
+    <!-- Only show caption if it exists to avoid empty spacing. -->
+    {% if post.caption %}
+    <div class="post-caption">{{ post.caption }}</div>
+    {% endif %}
+
+
+    <div class="post-comments">
+        <h3>Comments</h3>
+
+        <!-- Loop through all comments on this post (newest-first). -->
+        {% for c in post.get_all_comments %}
+        <div class="comment">
+            <strong>{{ c.profile.display_name|default:c.profile.username }}</strong>
+            <span class="muted">{{ c.timestamp }}</span>
+            <p>{{ c.text }}</p>
+        </div>
+
+        <!-- If there are no comments, display an empty-state message. -->
+        {% empty %}
+        <p class="muted">No comments yet.</p>
+        {% endfor %}
+    </div>
+
+
+    <!-- Link to the full post detail page for update/delete actions and full view. -->
+    <div class="post-detail-actions">
+        <a class="btn btn-outline" href="{% url 'show_post' post.pk %}">
+            View post
+        </a>
+    </div>
+
+</div>
+
+<!-- If the feed contains no posts, display an empty-state message. -->
+{% empty %}
+<p>No posts in your feed yet.</p>
+{% endfor %}
+
+{% endblock %}

@@ -42,17 +42,34 @@
     <footer class="bottom-nav">
         <div class="bottom-nav-inner">
 
-            <!-- Link to view all profiles -->
-            <a class="bottom-nav-link" href="{% url 'show_all_profiles' %}">
-                Show All Profiles
+            <!-- Home: show feed when we know which profile we are in -->
+            {% if profile %}
+            <a class="bottom-nav-link" href="{% url 'show_feed' profile.pk %}">
+                Home
             </a>
+            {% endif %}
 
-            <!-- Only show Create Post when viewing a profile -->
+            <!-- Search link -->
+            {% if profile %}
+            <a class="bottom-nav-link" href="{% url 'search' profile.pk %}">
+                Search
+            </a>
+            {% endif %}
+
+            <!-- Create Post -->
             {% if profile %}
             <a class="bottom-nav-link primary" href="{% url 'create_post' profile.pk %}">
                 Create Post
             </a>
             {% endif %}
+
+            <!-- Profile link -->
+            {% if profile %}
+            <a class="bottom-nav-link" href="{% url 'show_profile' profile.pk %}">
+                Profile
+            </a>
+            {% endif %}
+
 
         </div>
     </footer>

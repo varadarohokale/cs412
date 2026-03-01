@@ -1,0 +1,41 @@
+<!--
+    File: show_followers.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/1/2026
+    Description: Display all followers of a Profile.
+    This page uses Profile accessor methods to retrieve the list of
+    follower Profiles and display each as a link to their profile page.
+-->
+
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+
+<!-- Page title: indicate whose followers are being displayed. -->
+<h2>Followers of {{ profile.display_name|default:profile.username }}</h2>
+
+<!-- If-statement is necessary to handle the empty case (no followers). -->
+{% if profile.get_followers %}
+
+<!-- Display followers as a simple list of links to each follower’s Profile page. -->
+<ul>
+    <!-- Loop is necessary to display each follower Profile. -->
+    {% for p in profile.get_followers %}
+    <li>
+        <a href="{% url 'show_profile' p.pk %}">
+            {{ p.display_name|default:p.username }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+<!-- Empty-state message shown when the follower list is empty. -->
+{% else %}
+<p>No followers yet.</p>
+{% endif %}
+
+<!-- Navigation back to the Profile page of the user whose followers are shown. -->
+<a class="btn btn-outline" href="{% url 'show_profile' profile.pk %}">
+    Back to profile
+</a>
+
+{% endblock %}
