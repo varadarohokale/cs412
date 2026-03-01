@@ -5,7 +5,7 @@
 # accessor methods for retrieving related objects.
 
 from django.db import models
-
+from django.urls import reverse
 
 class Profile(models.Model):
     """Represent a user profile within the mini_insta application."""
@@ -35,6 +35,10 @@ class Profile(models.Model):
         Posts are ordered newest-first by timestamp.
         """
         return Post.objects.filter(profile=self).order_by("-timestamp")
+    
+    def get_absolute_url(self):
+        """Return the URL to display this Profile."""
+        return reverse("show_profile", kwargs={"pk": self.pk})
 
 
 class Post(models.Model):
@@ -70,6 +74,23 @@ class Photo(models.Model):
     # Date and time the photo was created.
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    image_file = models.ImageField(blank=True, null=True) 
+
     def __str__(self):
         """Return a string representation of this Photo."""
-        return f"{self.post}, {self.image_url}, {self.timestamp}"
+        if self.image_url:
+            return self.image_url
+        if self.image_file:
+            return self.image_file.url
+        return "No image"
+
+    def get_image_url(self):
+        '''
+        Return the URL to the image for this Photo.
+        If image_url exists, use it; otherwise use image_file.url.
+        '''
+        if self.image_url:
+            return self.image_url
+        if self.image_file:
+            return self.image_file.url
+        return ""

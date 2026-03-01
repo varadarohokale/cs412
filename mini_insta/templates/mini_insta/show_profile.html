@@ -57,6 +57,10 @@
                     {{ profile.bio_text }}
                 </div>
 
+                <a class="btn btn-outline" href="{% url 'update_profile' profile.pk %}">
+                    Update Profile
+                </a>
+
                 <!-- Display the timestamp for when the user joined -->
                 <div class="meta muted">
                     Joined {{ profile.join_date }}

@@ -21,14 +21,14 @@
             {% for photo in post.photos.all %}
 
             <div class="post-slide">
-                <img class="post-detail-img" src="{{ photo.image_url }}" alt="Post photo {{ forloop.counter }}">
+                <img class="post-detail-img" src="{{ photo.get_image_url }}" alt="Post photo {{ forloop.counter }}">
             </div>
 
             {% empty %}
 
             <!-- If the post has no photos, show a placeholder -->
             <div class="post-slide">
-                <img class="post-detail-img" src="{% static 'images/no-image.png' %}" alt="No image available">
+                <img class="post-detail-img" src="{% static 'no-image.png' %}" alt="No image available">
             </div>
 
             {% endfor %}
@@ -53,10 +53,18 @@
     <!-- Timestamp appears below the caption -->
     <div class="post-time muted">{{ post.timestamp }}</div>
 
-    <!-- Navigation back to the profile page -->
+    <!-- Navigation back to the profile page, update or delete post  -->
     <div class="post-detail-actions">
         <a class="btn btn-outline" href="{% url 'show_profile' post.profile.pk %}">
             Back to profile
+        </a>
+
+        <a class="btn btn-outline" href="{% url 'update_post' post.pk %}">
+            Update
+        </a>
+
+        <a class="btn btn-outline" href="{% url 'delete_post' post.pk %}">
+            Delete
         </a>
     </div>
 

@@ -6,16 +6,30 @@
 
 from django import forms
 
-from .models import Post
+from .models import Post,  Profile
 
 
 class CreatePostForm(forms.ModelForm):
     """Collect data needed to create a Post plus one related Photo."""
 
-    # URL for the photo associated with the new post.
-    image_url = forms.URLField(label="Image URL", required=True)
 
     class Meta:
         """Configure the form to save a Post instance."""
         model = Post
-        fields = ["caption", "image_url"]
+        fields = ["caption"]
+
+class UpdateProfileForm(forms.ModelForm):
+    """Collect data needed to update an existing Profile."""
+
+    class Meta:
+        """Configure the form to save a Profile instance. Do not allow username or join_date to be edited."""
+        model = Profile
+        fields = ["display_name", "profile_image_url", "bio_text"]
+
+class UpdatePostForm(forms.ModelForm):
+    """Collect data needed to update an existing Post."""
+
+    class Meta:
+        """Configure the form to update a Post instance."""
+        model = Post
+        fields = ["caption"]

@@ -1,0 +1,45 @@
+<!--
+    File: update_profile_form.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/1/2026
+    Description: Template for updating an existing Profile.
+    Allows the user to edit display_name, profile_image_url, and bio_text.
+-->
+
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+
+<div class="post-form-card">
+    <h2>Update Profile</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_display_name">Display name</label>
+            {{ form.display_name }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_profile_image_url">Profile image URL</label>
+            {{ form.profile_image_url }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_bio_text">Bio</label>
+            {{ form.bio_text }}
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn-primary">
+                Update
+            </button>
+
+            <a href="{% url 'show_profile' object.pk %}" class="btn-secondary">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

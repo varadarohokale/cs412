@@ -16,7 +16,7 @@
     <h2>Create Post</h2>
 
     <!-- Form submits POST data to create_post view -->
-    <form method="POST" action="{% url 'create_post' profile.pk %}">
+    <form method="POST" action="{% url 'create_post' profile.pk %}" enctype="multipart/form-data">
 
         {% csrf_token %}
         <!-- CSRF token required for secure POST submission -->
@@ -27,10 +27,10 @@
             {{ form.caption }}
         </div>
 
-        <!-- Image URL field -->
+        <!-- Upload Photos field (multiple files allowed) -->
         <div class="form-group">
-            <label for="id_image_url">Image URL</label>
-            {{ form.image_url }}
+            <label for="id_files">Upload photos</label>
+            <input type="file" name="files" id="id_files" multiple>
         </div>
 
         <!-- Submit and Cancel buttons -->
