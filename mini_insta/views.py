@@ -363,6 +363,21 @@ class MyProfileDetailView(ProfileLoginRequiredMixin, DetailView):
         """Return the Profile associated with the logged in user."""
         return self.get_user_profile()
 
+    def get_context_data(self, **kwargs):
+        """Add the logged in user's Profile and follow status to context."""
+        context = super().get_context_data(**kwargs)
+
+        # logged_in_profile is the Profile associated with the
+        # authenticated Django User.
+        logged_in_profile = self.get_user_profile()
+        context["logged_in_profile"] = logged_in_profile
+
+        # is_following is False on the user's own Profile page,
+        # since a Profile should not follow itself.
+        context["is_following"] = False
+
+        return context
+    
 def logout_confirmation(request):
     """Display a logout confirmation page."""
     return render(request, "mini_insta/logged_out.html")
