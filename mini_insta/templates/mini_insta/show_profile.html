@@ -12,24 +12,19 @@
 
 {% block content %}
 
-<!-- Profile card containing the user’s main profile information -->
 <section class="card">
     <div class="profile-header">
 
-        <!-- Display the user's profile image at a larger size -->
         <div class="avatar-col">
             <img class="avatar" src="{{ profile.profile_image_url }}" alt="{{ profile.username }} profile photo">
         </div>
 
-        <!-- Display the user’s text information and placeholders -->
         <div class="info-col">
 
-            <!-- Show the user's username as the primary heading -->
             <div class="username-row">
                 <h1 class="handle">@{{ profile.username }}</h1>
             </div>
 
-            <!-- Placeholder counts for future assignment parts -->
             <div class="stats">
                 <div class="stat">
                     <span class="stat-num">{{ profile.get_all_posts.count }}</span>
@@ -51,24 +46,22 @@
                 </div>
             </div>
 
-            <!-- Show the user's display name, bio, and join date -->
             <div class="bio-block">
 
-                <!-- Display name -->
                 <div class="display-name">
                     {{ profile.display_name }}
                 </div>
 
-                <!-- User bio -->
                 <div class="bio">
                     {{ profile.bio_text }}
                 </div>
 
-                <a class="btn btn-outline" href="{% url 'update_profile' profile.pk %}">
+                {% if request.user.is_authenticated and request.user == profile.user %}
+                <a class="btn btn-outline" href="{% url 'update_profile' %}">
                     Update Profile
                 </a>
+                {% endif %}
 
-                <!-- Display the timestamp for when the user joined -->
                 <div class="meta muted">
                     Joined {{ profile.join_date }}
                 </div>
@@ -79,33 +72,30 @@
 
     </div>
 
-    <!-- Grid of posts for this profile -->
     <div class="posts-grid">
 
         {% for post in profile.get_all_posts %}
+        <div>
+            <a class="post-tile" href="{% url 'show_post' post.pk %}">
+                {% with post.photos.first as first_photo %}
+                {% if first_photo %}
+                <img class="post-img" src="{{ first_photo.get_image_url }}" alt="Post image">
+                {% else %}
+                <img class="post-img" src="{% static 'no-image.png' %}" alt="No image available">
+                {% endif %}
+                {% endwith %}
+            </a>
 
-        <!-- Each post tile links to its detail page -->
-        <a class="post-tile" href="{% url 'show_post' post.pk %}">
-
-            {% with post.photos.first as first_photo %}
-
-            {% if first_photo %}
-            <!-- Display first associated photo -->
-            <img class="post-img" src="{{ first_photo.get_image_url }}" alt="Post image">
-            {% else %}
-            <!-- Display placeholder if no photo exists -->
-            <img class="post-img" src="{% static 'no-image.png' %}" alt="No image available">
+            {% if request.user.is_authenticated and request.user == profile.user %}
+            <div class="post-owner-actions">
+                <a class="btn btn-outline" href="{% url 'update_post' post.pk %}">Update Post</a>
+                <a class="btn btn-outline" href="{% url 'delete_post' post.pk %}">Delete Post</a>
+            </div>
             {% endif %}
-
-            {% endwith %}
-
-        </a>
-
+        </div>
         {% endfor %}
 
     </div>
-
-
 </section>
 
 {% endblock %}

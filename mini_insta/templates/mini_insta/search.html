@@ -16,7 +16,7 @@
 
     <!-- Use GET (not POST) because this is not modifying data; it retrieves results.
          GET also places the query in the URL, making it easy to refresh/share results. -->
-    <form method="GET" action="{% url 'search' profile.pk %}">
+    <form method="GET" action="{% url 'search' %}">
 
         <!-- Input section: collect the user's query string. -->
         <div class="form-group">

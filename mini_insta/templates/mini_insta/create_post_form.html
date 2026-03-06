@@ -16,7 +16,7 @@
     <h2>Create Post</h2>
 
     <!-- Form submits POST data to create_post view -->
-    <form method="POST" action="{% url 'create_post' profile.pk %}" enctype="multipart/form-data">
+    <form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data">
 
         {% csrf_token %}
         <!-- CSRF token required for secure POST submission -->

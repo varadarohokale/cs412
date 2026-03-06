@@ -12,7 +12,20 @@ from .models import Photo, Post, Profile
 from django.views.generic.edit import UpdateView, DeleteView
 from django.shortcuts import render
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
+class ProfileLoginRequiredMixin(LoginRequiredMixin):
+    """Require login and provide helper methods for the logged in Profile."""
+
+    def get_login_url(self):
+        """Return the URL required for login."""
+        return reverse("login")
+
+    def get_user_profile(self):
+        """Return the Profile associated with the logged in user."""
+        return Profile.objects.get(user=self.request.user)
 
 class ProfileListView(ListView):
     """Display a list of all Profile records."""
@@ -25,6 +38,14 @@ class ProfileListView(ListView):
 
     # Use this name to reference the QuerySet in the template.
     context_object_name = "profiles"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Add debugging information."""
+        if request.user.is_authenticated:
+            print(f"ProfileListView.dispatch(): request.user={request.user}")
+        else:
+            print("ProfileListView.dispatch(): not logged in.")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProfileDetailView(DetailView):
@@ -40,7 +61,7 @@ class ProfileDetailView(DetailView):
     context_object_name = "profile"
 
 
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(ProfileLoginRequiredMixin, UpdateView):
     """Update an existing Profile record."""
 
     # Specify which model object is being updated.
@@ -59,6 +80,10 @@ class UpdateProfileView(UpdateView):
 
         # Delegate database update + redirect behavior to Django's UpdateView.
         return super().form_valid(form)
+
+    def get_object(self):
+        """Return the Profile associated with the logged in user."""
+        return self.get_user_profile()
 
 
 
@@ -85,7 +110,7 @@ class PostDetailView(DetailView):
         return context
 
 
-class CreatePostView(CreateView):
+class CreatePostView(ProfileLoginRequiredMixin, CreateView):
     """Create a new Post for a given Profile, including uploaded Photo(s)."""
 
     # Collect Post data (caption). Photo uploads are handled via request.FILES.
@@ -99,16 +124,15 @@ class CreatePostView(CreateView):
         context = super().get_context_data(**kwargs)
 
         # profile_pk identifies which Profile is creating the new Post.
-        profile_pk = self.kwargs["pk"]
-        context["profile"] = Profile.objects.get(pk=profile_pk)
+        context["profile"] = self.get_user_profile()
 
         return context
 
     def form_valid(self, form):
         """Save the Post, then create related Photo objects from uploaded files."""
         # profile_pk is the primary key of the Profile creating the Post.
-        profile_pk = self.kwargs["pk"]
-        profile = Profile.objects.get(pk=profile_pk)
+        profile = self.get_user_profile()
+
 
         # Attach the Post to the correct Profile before saving it.
         form.instance.profile = profile
@@ -132,7 +156,7 @@ class CreatePostView(CreateView):
         return reverse("show_post", kwargs={"pk": self.object.pk})
 
 
-class UpdatePostView(UpdateView):
+class UpdatePostView(ProfileLoginRequiredMixin, UpdateView):
     """Update an existing Post caption."""
 
     # Specify which model object is being updated.
@@ -155,9 +179,20 @@ class UpdatePostView(UpdateView):
     def get_success_url(self):
         """Return the URL to display the updated Post."""
         return reverse("show_post", kwargs={"pk": self.object.pk})
+    
+    def dispatch(self, request, *args, **kwargs):
+        """Only allow the owner of the Post to update it."""
+        post = self.get_object()
+        if post.profile != self.get_user_profile():
+            return render(
+                request,
+                "mini_insta/not_authorized.html",
+                {"message": "You may only update your own posts."},
+            )
+        return super().dispatch(request, *args, **kwargs)
 
 
-class DeletePostView(DeleteView):
+class DeletePostView(ProfileLoginRequiredMixin, DeleteView):
     """Delete an existing Post and redirect to the owner's Profile page."""
 
     # Specify which model object is being deleted.
@@ -185,6 +220,16 @@ class DeletePostView(DeleteView):
         # After deleting a Post, return to the Profile page of the Post owner.
         return reverse("show_profile", kwargs={"pk": self.object.profile.pk})
 
+    def dispatch(self, request, *args, **kwargs):
+        """Only allow the owner of the Post to delete it."""
+        post = self.get_object()
+        if post.profile != self.get_user_profile():
+            return render(
+                request,
+                "mini_insta/not_authorized.html",
+                {"message": "You may only delete your own posts."},
+            )
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ShowFollowersDetailView(DetailView):
@@ -205,7 +250,7 @@ class ShowFollowingDetailView(DetailView):
 
 
 
-class PostFeedListView(ListView):
+class PostFeedListView(ProfileLoginRequiredMixin, ListView):
     """Display a feed of Posts for a single Profile."""
 
     # The feed is a list of Post objects, so ListView is appropriate.
@@ -214,26 +259,17 @@ class PostFeedListView(ListView):
     context_object_name = "posts"
 
     def get_queryset(self):
-        """Return the Posts in the feed for the Profile identified by pk."""
-        # profile_pk identifies which user's feed we are rendering.
-        profile_pk = self.kwargs["pk"]
-        profile = Profile.objects.get(pk=profile_pk)
-
-        # Delegate feed logic to the Profile accessor method.
+        """Return the feed Posts for the logged in user's Profile."""
+        profile = self.get_user_profile()
         return profile.get_post_feed()
 
     def get_context_data(self, **kwargs):
-        """Add the Profile to context for navigation links."""
+        """Add the logged in user's Profile to context for navigation links."""
         context = super().get_context_data(**kwargs)
-
-        # Provide "profile" so base.html can build nav links (home/search/profile).
-        profile_pk = self.kwargs["pk"]
-        context["profile"] = Profile.objects.get(pk=profile_pk)
-
+        context["profile"] = self.get_user_profile()
         return context
 
-
-class SearchView(ListView):
+class SearchView(ProfileLoginRequiredMixin, ListView):
     """Search Profiles and Posts based on a text query."""
 
     # Default results template (used when query is present).
@@ -248,8 +284,8 @@ class SearchView(ListView):
         # should display when no query parameter is provided.
         if "query" not in self.request.GET:
             # profile_pk identifies which Profile is performing the search.
-            profile_pk = self.kwargs["pk"]
-            profile = Profile.objects.get(pk=profile_pk)
+           
+            profile = self.get_user_profile()
 
             # Render the search form template with required context.
             return render(request, "mini_insta/search.html", {"profile": profile})
@@ -258,7 +294,7 @@ class SearchView(ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        """Return Posts whose caption contains the query (case-insensitive)."""
+        """Return Posts whose caption contains the query ."""
         # q is the search query text typed by the user.
         q = self.request.GET.get("query", "").strip()
 
@@ -274,8 +310,7 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
 
         # profile_pk identifies which Profile is performing the search.
-        profile_pk = self.kwargs["pk"]
-        profile = Profile.objects.get(pk=profile_pk)
+        profile= self.get_user_profile()
         context["profile"] = profile
 
         # q is the search query text typed by the user.
@@ -298,3 +333,25 @@ class SearchView(ListView):
             context["profiles"] = Profile.objects.none()
 
         return context
+
+class MyProfileDetailView(ProfileLoginRequiredMixin, DetailView):
+    """Display the Profile of the logged in user."""
+
+    model = Profile
+    template_name = "mini_insta/show_profile.html"
+    context_object_name = "profile"
+
+    def get_object(self):
+        """Return the Profile associated with the logged in user."""
+        return self.get_user_profile()
+    
+class UserRegistrationView(CreateView):
+    """Show/process form for account registration."""
+
+    template_name = "mini_insta/register.html"
+    form_class = UserCreationForm
+    model = User
+
+    def get_success_url(self):
+        """Return the URL to redirect to after creating a new User."""
+        return reverse("login")

@@ -83,12 +83,13 @@
     <!-- Timestamp appears below the comments -->
     <div class="post-time muted">{{ post.timestamp }}</div>
 
-    <!-- Navigation back to the profile page, update or delete post  -->
+    <!-- Navigation back to the profile page, update or delete post -->
     <div class="post-detail-actions">
         <a class="btn btn-outline" href="{% url 'show_profile' post.profile.pk %}">
             Back to profile
         </a>
 
+        {% if request.user.is_authenticated and request.user == post.profile.user %}
         <a class="btn btn-outline" href="{% url 'update_post' post.pk %}">
             Update
         </a>
@@ -96,6 +97,7 @@
         <a class="btn btn-outline" href="{% url 'delete_post' post.pk %}">
             Delete
         </a>
+        {% endif %}
     </div>
 
 </div>
