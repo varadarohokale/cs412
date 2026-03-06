@@ -82,9 +82,6 @@ class Profile(models.Model):
             "-timestamp"
         )
     
-    def is_following(self, other_profile):
-        """Return True if this Profile follows other_profile."""
-        return Follow.objects.filter(profile=other_profile, follower_profile=self).exists()
 
 
 class Post(models.Model):
@@ -118,10 +115,6 @@ class Post(models.Model):
         # A QuerySet is convenient because templates can use .count().
         return Like.objects.filter(post=self)
     
-    def is_liked_by(self, profile):
-        """Return True if this Post is liked by the given Profile."""
-        return Like.objects.filter(post=self, profile=profile).exists()
-
 
 class Photo(models.Model):
     """Represent a photo associated with a Post."""

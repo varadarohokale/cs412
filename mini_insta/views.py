@@ -14,7 +14,6 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 
@@ -220,16 +219,6 @@ class UpdatePostView(ProfileLoginRequiredMixin, UpdateView):
         """Return the URL to display the updated Post."""
         return reverse("show_post", kwargs={"pk": self.object.pk})
     
-    def dispatch(self, request, *args, **kwargs):
-        """Only allow the owner of the Post to update it."""
-        post = self.get_object()
-        if post.profile != self.get_user_profile():
-            return render(
-                request,
-                "mini_insta/not_authorized.html",
-                {"message": "You may only update your own posts."},
-            )
-        return super().dispatch(request, *args, **kwargs)
 
 
 class DeletePostView(ProfileLoginRequiredMixin, DeleteView):
@@ -259,17 +248,6 @@ class DeletePostView(ProfileLoginRequiredMixin, DeleteView):
         """Return the URL to display after successfully deleting the Post."""
         # After deleting a Post, return to the Profile page of the Post owner.
         return reverse("show_profile", kwargs={"pk": self.object.profile.pk})
-
-    def dispatch(self, request, *args, **kwargs):
-        """Only allow the owner of the Post to delete it."""
-        post = self.get_object()
-        if post.profile != self.get_user_profile():
-            return render(
-                request,
-                "mini_insta/not_authorized.html",
-                {"message": "You may only delete your own posts."},
-            )
-        return super().dispatch(request, *args, **kwargs)
 
 
 class ShowFollowersDetailView(DetailView):
@@ -384,17 +362,6 @@ class MyProfileDetailView(ProfileLoginRequiredMixin, DetailView):
     def get_object(self):
         """Return the Profile associated with the logged in user."""
         return self.get_user_profile()
-    
-class UserRegistrationView(CreateView):
-    """Show/process form for account registration."""
-
-    template_name = "mini_insta/register.html"
-    form_class = UserCreationForm
-    model = User
-
-    def get_success_url(self):
-        """Return the URL to redirect to after creating a new User."""
-        return reverse("login")
 
 def logout_confirmation(request):
     """Display a logout confirmation page."""
