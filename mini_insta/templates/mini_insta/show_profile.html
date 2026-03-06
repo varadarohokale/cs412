@@ -118,19 +118,6 @@
                 {% endif %}
                 {% endwith %}
             </a>
-
-            <!-- Show update/delete controls only when the authenticated
-                 user owns this Profile and therefore owns these Posts. -->
-            {% if request.user.is_authenticated and request.user == profile.user %}
-            <div class="post-owner-actions">
-                <a class="btn btn-outline" href="{% url 'update_post' post.pk %}">
-                    Update Post
-                </a>
-                <a class="btn btn-outline" href="{% url 'delete_post' post.pk %}">
-                    Delete Post
-                </a>
-            </div>
-            {% endif %}
         </div>
         {% endfor %}
 
