@@ -64,14 +64,22 @@ class ProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         """Add the logged in user's Profile and follow status to context."""
+        # Begin by retrieving the default context dictionary from DetailView.
         context = super().get_context_data(**kwargs)
 
+        # This if-statement is necessary because follow/unfollow controls
+        # should only appear when a user is authenticated.
         if self.request.user.is_authenticated:
+            # logged_in_profile is the Profile associated with the
+            # authenticated Django User.
             logged_in_profile = Profile.objects.get(user=self.request.user)
             context["logged_in_profile"] = logged_in_profile
+
+            # is_following is True exactly when the logged in user's
+            # Profile already follows the Profile currently being displayed.
             context["is_following"] = Follow.objects.filter(
                 profile=self.object,
-                follower_profile=logged_in_profile
+                follower_profile=logged_in_profile,
             ).exists()
 
         return context
@@ -116,23 +124,30 @@ class PostDetailView(DetailView):
     context_object_name = "post"
 
     def get_context_data(self, **kwargs):
-        """Add the Profile and like status to the template context."""
+        """Add navigation and like-status context for the displayed Post."""
+        # Begin by retrieving the default context dictionary from DetailView.
         context = super().get_context_data(**kwargs)
 
+        # profile is the owner/author of the Post, needed by the template
+        # for navigation back to that Profile page.
         context["profile"] = self.get_object().profile
 
+        # This if-statement is necessary because like/unlike controls
+        # should only appear when a user is authenticated.
         if self.request.user.is_authenticated:
+            # logged_in_profile is the Profile associated with the
+            # authenticated Django User.
             logged_in_profile = Profile.objects.get(user=self.request.user)
             context["logged_in_profile"] = logged_in_profile
 
-            # True when the logged in user already likes this post.
+            # has_liked is True exactly when the logged in user's Profile
+            # has already liked the displayed Post.
             context["has_liked"] = Like.objects.filter(
                 post=self.object,
-                profile=logged_in_profile
+                profile=logged_in_profile,
             ).exists()
 
         return context
- 
 
 
 class CreatePostView(ProfileLoginRequiredMixin, CreateView):
@@ -415,15 +430,21 @@ class CreateProfileView(CreateView):
 class FollowProfileView(ProfileLoginRequiredMixin, DetailView):
     """Allow the logged in user's Profile to follow another Profile."""
 
+    # Retrieve the other Profile using the primary key from the URL.
     model = Profile
 
     def dispatch(self, request, *args, **kwargs):
-        """Create a Follow object for the logged in user and the other Profile."""
+        """Create a Follow record for the logged in user's Profile."""
+        # other_profile is the Profile identified by the pk in the URL.
         other_profile = self.get_object()
+
+        # logged_in_profile is the Profile of the authenticated user.
         logged_in_profile = self.get_user_profile()
 
-        # Do not allow a Profile to follow itself.
+        # This if-statement is necessary because a Profile should not
+        # be allowed to follow itself.
         if logged_in_profile != other_profile:
+            # Only create a Follow record if one does not already exist.
             if not Follow.objects.filter(
                 profile=other_profile,
                 follower_profile=logged_in_profile,
@@ -433,55 +454,83 @@ class FollowProfileView(ProfileLoginRequiredMixin, DetailView):
                     follower_profile=logged_in_profile,
                 )
 
+        # After creating the Follow, return to the other Profile page.
         return redirect("show_profile", pk=other_profile.pk)
 
 
 class DeleteFollowProfileView(ProfileLoginRequiredMixin, DetailView):
     """Allow the logged in user's Profile to unfollow another Profile."""
 
+    # Retrieve the other Profile using the primary key from the URL.
     model = Profile
 
     def dispatch(self, request, *args, **kwargs):
-        """Delete the Follow object for the logged in user and the other Profile."""
+        """Delete the Follow record for the logged in user's Profile."""
+        # other_profile is the Profile identified by the pk in the URL.
         other_profile = self.get_object()
+
+        # logged_in_profile is the Profile of the authenticated user.
         logged_in_profile = self.get_user_profile()
 
+        # Delete the matching Follow relationship, if it exists.
         Follow.objects.filter(
             profile=other_profile,
             follower_profile=logged_in_profile,
         ).delete()
 
+        # After deleting the Follow, return to the other Profile page.
         return redirect("show_profile", pk=other_profile.pk)
-
 
 class LikePostView(ProfileLoginRequiredMixin, DetailView):
     """Allow the logged in user's Profile to like another Profile's Post."""
 
+    # Retrieve the target Post using the primary key from the URL.
     model = Post
 
     def dispatch(self, request, *args, **kwargs):
-        """Create a Like object for the logged in user and the Post."""
+        """Create a Like record for the logged in user's Profile."""
+        # post is the Post identified by the pk in the URL.
         post = self.get_object()
+
+        # logged_in_profile is the Profile of the authenticated user.
         logged_in_profile = self.get_user_profile()
 
-        # Do not allow a Profile to like its own Post.
+        # This if-statement is necessary because a Profile should not
+        # be allowed to like its own Post.
         if post.profile != logged_in_profile:
-            if not Like.objects.filter(post=post, profile=logged_in_profile).exists():
-                Like.objects.create(post=post, profile=logged_in_profile)
+            # Only create a Like record if one does not already exist.
+            if not Like.objects.filter(
+                post=post,
+                profile=logged_in_profile,
+            ).exists():
+                Like.objects.create(
+                    post=post,
+                    profile=logged_in_profile,
+                )
 
+        # After creating the Like, return to the Post page.
         return redirect("show_post", pk=post.pk)
 
 
 class DeleteLikePostView(ProfileLoginRequiredMixin, DetailView):
     """Allow the logged in user's Profile to remove a like from a Post."""
 
+    # Retrieve the target Post using the primary key from the URL.
     model = Post
 
     def dispatch(self, request, *args, **kwargs):
-        """Delete the Like object for the logged in user and the Post."""
+        """Delete the Like record for the logged in user's Profile."""
+        # post is the Post identified by the pk in the URL.
         post = self.get_object()
+
+        # logged_in_profile is the Profile of the authenticated user.
         logged_in_profile = self.get_user_profile()
 
-        Like.objects.filter(post=post, profile=logged_in_profile).delete()
+        # Delete the matching Like relationship, if it exists.
+        Like.objects.filter(
+            post=post,
+            profile=logged_in_profile,
+        ).delete()
 
+        # After deleting the Like, return to the Post page.
         return redirect("show_post", pk=post.pk)

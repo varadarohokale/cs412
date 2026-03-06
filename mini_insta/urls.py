@@ -47,9 +47,11 @@ urlpatterns = [
     path("profile/<int:pk>/followers", ShowFollowersDetailView.as_view(), name="show_followers"),
     path("profile/<int:pk>/following", ShowFollowingDetailView.as_view(), name="show_following"),
 
+    # Follow / unfollow another Profile.
     path("profile/<int:pk>/follow", FollowProfileView.as_view(), name="follow_profile"),
     path("profile/<int:pk>/delete_follow", DeleteFollowProfileView.as_view(), name="delete_follow_profile"),
 
+    # Like / unlike another Profile's Post.
     path("post/<int:pk>/like", LikePostView.as_view(), name="like_post"),
     path("post/<int:pk>/delete_like", DeleteLikePostView.as_view(), name="delete_like_post"),
 

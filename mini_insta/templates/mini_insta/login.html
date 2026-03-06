@@ -1,21 +1,47 @@
-{% extends 'mini_insta/base.html' %}
+<!--
+    File: login.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/06/2026
+    Description: Display the login form for mini_insta. This template
+    renders Django's built-in authentication form and includes a hidden
+    next field so the user is redirected to the appropriate page after
+    a successful login.
+-->
+
+{% extends "mini_insta/base.html" %}
 
 {% block content %}
-<h1>Login</h1>
 
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {{ form }}
+<!-- Card container to visually separate the login form from the page
+     background. -->
+<div class="post-form-card">
+    <h1>Login</h1>
 
-    {% if request.GET.next %}
-    <input type="hidden" name="next" value="{{ request.GET.next }}">
-    {% else %}
-    <input type="hidden" name="next" value="{% url 'show_all_profiles' %}">
-    {% endif %}
+    <!-- Use POST because this form submits authentication credentials
+         to Django's LoginView. -->
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <!-- CSRF token is required for secure POST submission in Django. -->
 
-    <input type="submit" value="Login">
-</form>
+        <!-- Display Django's built-in authentication form, which
+             includes the username and password fields. -->
+        {{ form }}
 
-<hr>
-Don't have an account? <a href="{% url 'register' %}">Register here</a>.
+        <!-- This if/else structure is necessary so the user is sent
+             back to the page originally requested after login.
+             Otherwise, send the user to the all-profiles page. -->
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% else %}
+        <input type="hidden" name="next" value="{% url 'show_all_profiles' %}">
+        {% endif %}
+
+        <input type="submit" value="Login">
+    </form>
+
+    <hr>
+
+    <!-- Provide a link for users who do not yet have an account. -->
+    Don't have an account? <a href="{% url 'register' %}">Register here</a>.
+</div>
+
 {% endblock %}

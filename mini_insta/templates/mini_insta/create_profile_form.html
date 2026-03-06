@@ -1,13 +1,29 @@
+<!--
+    File: create_profile_form.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/06/2026
+    Description: Display a combined registration and profile-creation
+    form. This page collects Django User account information through
+    UserCreationForm and Profile information through CreateProfileForm,
+    then submits both sets of data together.
+-->
+
 {% extends "mini_insta/base.html" %}
 
 {% block content %}
 
+<!-- Card container to visually separate the create-profile form
+     from the page background. -->
 <div class="post-form-card">
     <h2>Create Profile</h2>
 
+    <!-- Use POST because this operation creates new database records:
+         a Django User and a Profile. -->
     <form method="POST">
         {% csrf_token %}
+        <!-- CSRF token is required for secure POST submission in Django. -->
 
+        <!-- Collect Django authentication data needed
+             to create the new User account. -->
         <h3>Create User Account</h3>
 
         <div class="form-group">
@@ -25,6 +41,9 @@
             {{ user_form.password2 }}
         </div>
 
+        <!-- Collect application-specific Profile data.
+             The Django User is not chosen by the client; it will be
+             attached programmatically in the view after the User is saved. -->
         <h3>Create Profile</h3>
 
         <div class="form-group">
@@ -47,9 +66,13 @@
             {{ form.bio_text }}
         </div>
 
+        <!-- Submit the combined registration/profile
+             form or cancel back to the all-profiles page. -->
         <div class="form-buttons">
             <button type="submit" class="btn-primary">Create Profile</button>
-            <a href="{% url 'show_all_profiles' %}" class="btn-secondary">Cancel</a>
+            <a href="{% url 'show_all_profiles' %}" class="btn-secondary">
+                Cancel
+            </a>
         </div>
     </form>
 </div>

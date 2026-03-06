@@ -45,6 +45,8 @@
 
     </div>
 
+    <!-- Show like/unlike controls only when the viewer is logged in
+         and the Post belongs to another Profile. -->
     {% if request.user.is_authenticated and logged_in_profile != post.profile %}
     {% if has_liked %}
     <a class="btn btn-outline" href="{% url 'delete_like_post' post.pk %}">

@@ -1,10 +1,11 @@
 <!--
     File: show_profile.html
     Author: Varada Rohokale (vroho@bu.edu), 2/13/2026
-    Description: Displays a single Profile record. The page shows a
-    larger profile image, the username, display name, user's
-    bio, the join date and posts. Placeholder sections are
-    included for future follower/following/post counts.
+    Description: Display a single Profile record. The page shows the
+    profile image, username, display name, bio text, join date, and
+    all Posts created by this Profile. It also conditionally shows
+    follow/unfollow controls for other authenticated users and edit
+    controls for the owner of the Profile.
 -->
 
 {% extends "mini_insta/base.html" %}
@@ -12,19 +13,26 @@
 
 {% block content %}
 
+<!-- Main Profile card containing the user's identity information
+     and the grid of Posts below. -->
 <section class="card">
     <div class="profile-header">
 
+        <!-- Display the Profile image at a larger size. -->
         <div class="avatar-col">
             <img class="avatar" src="{{ profile.profile_image_url }}" alt="{{ profile.username }} profile photo">
         </div>
 
+        <!-- Display the textual Profile information and action buttons. -->
         <div class="info-col">
 
+            <!-- Show the Profile username prominently. -->
             <div class="username-row">
                 <h1 class="handle">@{{ profile.username }}</h1>
             </div>
 
+            <!-- Display summary statistics for Posts, followers,
+                 and following relationships. -->
             <div class="stats">
                 <div class="stat">
                     <span class="stat-num">{{ profile.get_all_posts.count }}</span>
@@ -46,6 +54,8 @@
                 </div>
             </div>
 
+            <!-- Show the display name, bio, action buttons,
+                 and join date. -->
             <div class="bio-block">
 
                 <div class="display-name">
@@ -56,6 +66,9 @@
                     {{ profile.bio_text }}
                 </div>
 
+                <!-- Show follow/unfollow controls only when the viewer
+                     is logged in and is looking at another user's Profile.
+                     This prevents a Profile from following itself. -->
                 {% if request.user.is_authenticated and logged_in_profile != profile %}
                 {% if is_following %}
                 <a class="btn btn-outline" href="{% url 'delete_follow_profile' profile.pk %}">
@@ -68,12 +81,15 @@
                 {% endif %}
                 {% endif %}
 
+                <!-- Show the update button only when the authenticated
+                     user is the owner of this Profile. -->
                 {% if request.user.is_authenticated and request.user == profile.user %}
                 <a class="btn btn-outline" href="{% url 'update_profile' %}">
                     Update Profile
                 </a>
                 {% endif %}
 
+                <!-- Display the date this Profile was created/joined. -->
                 <div class="meta muted">
                     Joined {{ profile.join_date }}
                 </div>
@@ -84,12 +100,17 @@
 
     </div>
 
+    <!-- Display all Posts created by this Profile in a grid. -->
     <div class="posts-grid">
 
+        <!-- Loop through each Post belonging to this Profile. -->
         {% for post in profile.get_all_posts %}
         <div>
+            <!-- Each tile links to the detailed page for that Post. -->
             <a class="post-tile" href="{% url 'show_post' post.pk %}">
                 {% with post.photos.first as first_photo %}
+                <!-- This if/else structure is necessary because
+                         some Posts may not yet have an associated Photo. -->
                 {% if first_photo %}
                 <img class="post-img" src="{{ first_photo.get_image_url }}" alt="Post image">
                 {% else %}
@@ -98,10 +119,16 @@
                 {% endwith %}
             </a>
 
+            <!-- Show update/delete controls only when the authenticated
+                 user owns this Profile and therefore owns these Posts. -->
             {% if request.user.is_authenticated and request.user == profile.user %}
             <div class="post-owner-actions">
-                <a class="btn btn-outline" href="{% url 'update_post' post.pk %}">Update Post</a>
-                <a class="btn btn-outline" href="{% url 'delete_post' post.pk %}">Delete Post</a>
+                <a class="btn btn-outline" href="{% url 'update_post' post.pk %}">
+                    Update Post
+                </a>
+                <a class="btn btn-outline" href="{% url 'delete_post' post.pk %}">
+                    Delete Post
+                </a>
             </div>
             {% endif %}
         </div>

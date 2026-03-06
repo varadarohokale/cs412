@@ -1,11 +1,30 @@
-{% extends 'mini_insta/base.html' %}
+<!--
+    File: register.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/06/2026
+    Description: Display the registration form for creating a new
+    Django User account in the mini_insta application.
+-->
+
+{% extends "mini_insta/base.html" %}
 
 {% block content %}
-<h1>Register for an account</h1>
 
-<form action="{% url 'register' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Register">
-</form>
+<!-- Card container to visually separate the registration form
+     from the page background. -->
+<div class="post-form-card">
+    <h1>Register for an account</h1>
+
+    <!-- Use POST because this form creates a new Django User
+         record in the database. -->
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <!-- CSRF token is required for secure POST submission in Django. -->
+
+        <!-- Display Django's built-in UserCreationForm. -->
+        {{ form }}
+
+        <input type="submit" value="Register">
+    </form>
+</div>
+
 {% endblock %}
