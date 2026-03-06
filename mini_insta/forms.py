@@ -11,9 +11,6 @@ from .models import Post,  Profile
 
 class CreatePostForm(forms.ModelForm):
     """Collect data needed to create a new Post.
-
-    Note: Photo uploads are handled via request.FILES in CreatePostView
-    (not as a field on this form).
     """
 
     class Meta:
@@ -30,7 +27,6 @@ class UpdateProfileForm(forms.ModelForm):
 
     class Meta:
         """Configure the form to update a Profile instance.
-
         Do not allow username or join_date to be edited.
         """
         # Connect this form to the Profile model so UpdateView can save updates.
@@ -50,3 +46,11 @@ class UpdatePostForm(forms.ModelForm):
 
         # Assignment requirement: only caption can be updated.
         fields = ["caption"]
+
+class CreateProfileForm(forms.ModelForm):
+    """Collect data needed to create a new Profile."""
+
+    class Meta:
+        """Configure the form to create a Profile instance."""
+        model = Profile
+        fields = ["username", "display_name", "profile_image_url", "bio_text"]

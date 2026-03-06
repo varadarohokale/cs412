@@ -56,6 +56,18 @@
                     {{ profile.bio_text }}
                 </div>
 
+                {% if request.user.is_authenticated and logged_in_profile != profile %}
+                {% if is_following %}
+                <a class="btn btn-outline" href="{% url 'delete_follow_profile' profile.pk %}">
+                    Unfollow
+                </a>
+                {% else %}
+                <a class="btn btn-outline" href="{% url 'follow_profile' profile.pk %}">
+                    Follow
+                </a>
+                {% endif %}
+                {% endif %}
+
                 {% if request.user.is_authenticated and request.user == profile.user %}
                 <a class="btn btn-outline" href="{% url 'update_profile' %}">
                     Update Profile

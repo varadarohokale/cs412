@@ -7,14 +7,16 @@
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
 
-from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm
-from .models import Photo, Post, Profile
+from .forms import CreatePostForm, UpdateProfileForm, UpdatePostForm, CreateProfileForm
+from .models import Photo, Post, Profile, Follow, Like
 from django.views.generic.edit import UpdateView, DeleteView
 from django.shortcuts import render
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
 
 class ProfileLoginRequiredMixin(LoginRequiredMixin):
     """Require login and provide helper methods for the logged in Profile."""
@@ -60,6 +62,20 @@ class ProfileDetailView(DetailView):
     # Use this name to reference the Profile object in the template.
     context_object_name = "profile"
 
+    def get_context_data(self, **kwargs):
+        """Add the logged in user's Profile and follow status to context."""
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            logged_in_profile = Profile.objects.get(user=self.request.user)
+            context["logged_in_profile"] = logged_in_profile
+            context["is_following"] = Follow.objects.filter(
+                profile=self.object,
+                follower_profile=logged_in_profile
+            ).exists()
+
+        return context
+
 
 class UpdateProfileView(ProfileLoginRequiredMixin, UpdateView):
     """Update an existing Profile record."""
@@ -100,14 +116,23 @@ class PostDetailView(DetailView):
     context_object_name = "post"
 
     def get_context_data(self, **kwargs):
-        """Add the Profile to the template context for navigation."""
+        """Add the Profile and like status to the template context."""
         context = super().get_context_data(**kwargs)
 
-        # The bottom navigation depends on having a "profile" in context.
-        # Here, "profile" means the owner/author of the Post.
         context["profile"] = self.get_object().profile
 
+        if self.request.user.is_authenticated:
+            logged_in_profile = Profile.objects.get(user=self.request.user)
+            context["logged_in_profile"] = logged_in_profile
+
+            # True when the logged in user already likes this post.
+            context["has_liked"] = Like.objects.filter(
+                post=self.object,
+                profile=logged_in_profile
+            ).exists()
+
         return context
+ 
 
 
 class CreatePostView(ProfileLoginRequiredMixin, CreateView):
@@ -355,3 +380,108 @@ class UserRegistrationView(CreateView):
     def get_success_url(self):
         """Return the URL to redirect to after creating a new User."""
         return reverse("login")
+
+def logout_confirmation(request):
+    """Display a logout confirmation page."""
+    return render(request, "mini_insta/logged_out.html")
+
+class CreateProfileView(CreateView):
+    """Create a new Profile and a new Django User at the same time."""
+
+    form_class = CreateProfileForm
+    template_name = "mini_insta/create_profile_form.html"
+
+    def get_context_data(self, **kwargs):
+        """Add the UserCreationForm to the template context."""
+        context = super().get_context_data(**kwargs)
+        context["user_form"] = UserCreationForm()
+        return context
+
+    def form_valid(self, form):
+        """Create the Django User, log them in, attach to Profile, and save."""
+        user_form = UserCreationForm(self.request.POST)
+
+        if not user_form.is_valid():
+            return self.form_invalid(form)
+
+        user = user_form.save()
+
+        login(self.request, user, backend="django.contrib.auth.backends.ModelBackend")
+
+        form.instance.user = user
+
+        return super().form_valid(form)
+
+class FollowProfileView(ProfileLoginRequiredMixin, DetailView):
+    """Allow the logged in user's Profile to follow another Profile."""
+
+    model = Profile
+
+    def dispatch(self, request, *args, **kwargs):
+        """Create a Follow object for the logged in user and the other Profile."""
+        other_profile = self.get_object()
+        logged_in_profile = self.get_user_profile()
+
+        # Do not allow a Profile to follow itself.
+        if logged_in_profile != other_profile:
+            if not Follow.objects.filter(
+                profile=other_profile,
+                follower_profile=logged_in_profile,
+            ).exists():
+                Follow.objects.create(
+                    profile=other_profile,
+                    follower_profile=logged_in_profile,
+                )
+
+        return redirect("show_profile", pk=other_profile.pk)
+
+
+class DeleteFollowProfileView(ProfileLoginRequiredMixin, DetailView):
+    """Allow the logged in user's Profile to unfollow another Profile."""
+
+    model = Profile
+
+    def dispatch(self, request, *args, **kwargs):
+        """Delete the Follow object for the logged in user and the other Profile."""
+        other_profile = self.get_object()
+        logged_in_profile = self.get_user_profile()
+
+        Follow.objects.filter(
+            profile=other_profile,
+            follower_profile=logged_in_profile,
+        ).delete()
+
+        return redirect("show_profile", pk=other_profile.pk)
+
+
+class LikePostView(ProfileLoginRequiredMixin, DetailView):
+    """Allow the logged in user's Profile to like another Profile's Post."""
+
+    model = Post
+
+    def dispatch(self, request, *args, **kwargs):
+        """Create a Like object for the logged in user and the Post."""
+        post = self.get_object()
+        logged_in_profile = self.get_user_profile()
+
+        # Do not allow a Profile to like its own Post.
+        if post.profile != logged_in_profile:
+            if not Like.objects.filter(post=post, profile=logged_in_profile).exists():
+                Like.objects.create(post=post, profile=logged_in_profile)
+
+        return redirect("show_post", pk=post.pk)
+
+
+class DeleteLikePostView(ProfileLoginRequiredMixin, DetailView):
+    """Allow the logged in user's Profile to remove a like from a Post."""
+
+    model = Post
+
+    def dispatch(self, request, *args, **kwargs):
+        """Delete the Like object for the logged in user and the Post."""
+        post = self.get_object()
+        logged_in_profile = self.get_user_profile()
+
+        Like.objects.filter(post=post, profile=logged_in_profile).delete()
+
+        return redirect("show_post", pk=post.pk)

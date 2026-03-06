@@ -1,0 +1,57 @@
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+
+<div class="post-form-card">
+    <h2>Create Profile</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <h3>Create User Account</h3>
+
+        <div class="form-group">
+            <label for="id_username">Username</label>
+            {{ user_form.username }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_password1">Password</label>
+            {{ user_form.password1 }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_password2">Password confirmation</label>
+            {{ user_form.password2 }}
+        </div>
+
+        <h3>Create Profile</h3>
+
+        <div class="form-group">
+            <label for="id_profile_username">Profile username</label>
+            {{ form.username }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_display_name">Display name</label>
+            {{ form.display_name }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_profile_image_url">Profile image URL</label>
+            {{ form.profile_image_url }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_bio_text">Bio</label>
+            {{ form.bio_text }}
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn-primary">Create Profile</button>
+            <a href="{% url 'show_all_profiles' %}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

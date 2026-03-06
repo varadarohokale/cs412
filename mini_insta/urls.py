@@ -16,6 +16,8 @@ urlpatterns = [
     # Show all profiles.
     path("", ProfileListView.as_view(), name="show_all_profiles"),
 
+    path("create_profile", CreateProfileView.as_view(), name="create_profile"),
+
     # Show the logged in user's own profile.
     path("profile", MyProfileDetailView.as_view(), name="show_own_profile"),
 
@@ -45,8 +47,15 @@ urlpatterns = [
     path("profile/<int:pk>/followers", ShowFollowersDetailView.as_view(), name="show_followers"),
     path("profile/<int:pk>/following", ShowFollowingDetailView.as_view(), name="show_following"),
 
+    path("profile/<int:pk>/follow", FollowProfileView.as_view(), name="follow_profile"),
+    path("profile/<int:pk>/delete_follow", DeleteFollowProfileView.as_view(), name="delete_follow_profile"),
+
+    path("post/<int:pk>/like", LikePostView.as_view(), name="like_post"),
+    path("post/<int:pk>/delete_like", DeleteLikePostView.as_view(), name="delete_like_post"),
+
     # Authentication views.
     path("login/", auth_views.LoginView.as_view(template_name="mini_insta/login.html"), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(next_page="show_all_profiles"), name="logout"),
+    path("logout_confirmation/", logout_confirmation, name="logout_confirmation"),
+    path("logout/", auth_views.LogoutView.as_view(next_page="logout_confirmation"), name="logout"),
     path("register/", UserRegistrationView.as_view(), name="register"),
 ]

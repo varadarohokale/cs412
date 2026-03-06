@@ -45,6 +45,18 @@
 
     </div>
 
+    {% if request.user.is_authenticated and logged_in_profile != post.profile %}
+    {% if has_liked %}
+    <a class="btn btn-outline" href="{% url 'delete_like_post' post.pk %}">
+        Unlike
+    </a>
+    {% else %}
+    <a class="btn btn-outline" href="{% url 'like_post' post.pk %}">
+        Like
+    </a>
+    {% endif %}
+    {% endif %}
+
     <!-- Show like count -->
     {% with likes=post.get_likes %}
     {% if likes.count > 0 %}
