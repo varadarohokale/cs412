@@ -19,11 +19,11 @@
 
 <!-- Loop through all Posts returned by PostFeedListView.get_queryset(). -->
 {% for post in posts %}
-<div class="card post-detail">
+<div class="card post-detail" id="post-{{ post.pk }}">
 
 
     <!-- Display the author’s profile image, name, and post timestamp. -->
-    <div class="feed-post-header">
+    <div class=" feed-post-header">
         <img class="profile-pic" src="{{ post.profile.profile_image_url }}" alt="Profile image">
 
         <div>
@@ -48,8 +48,20 @@
         {% endif %}
     </div>
 
-    <!-- Use a temporary variable so we can reuse the likes QuerySet.
-         This avoids repeating post.get_likes and keeps templates readable. -->
+    <div class="feed-like-row">
+        {% if post.pk in liked_post_ids %}
+        <a class="btn btn-outline"
+            href="{% url 'delete_like_post' post.pk %}?next={% url 'show_feed' %}%23post-{{ post.pk }}">
+            Unlike
+        </a>
+        {% else %}
+        <a class="btn btn-outline" href="{% url 'like_post' post.pk %}?next={% url 'show_feed' %}%23post-{{ post.pk }}">
+            Like
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Use a temporary variable so we can reuse the likes QuerySet. -->
     {% with likes=post.get_likes %}
 
     <!-- If likes exist, display "Liked by @user and N others".
@@ -92,14 +104,6 @@
         {% empty %}
         <p class="muted">No comments yet.</p>
         {% endfor %}
-    </div>
-
-
-    <!-- Link to the full post detail page for update/delete actions and full view. -->
-    <div class="post-detail-actions">
-        <a class="btn btn-outline" href="{% url 'show_post' post.pk %}">
-            View post
-        </a>
     </div>
 
 </div>

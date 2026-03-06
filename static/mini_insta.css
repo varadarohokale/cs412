@@ -627,6 +627,13 @@ a {
     cursor: pointer;
 }
 
+.feed-like-row {
+    margin-top: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
 @media (max-width: 700px) {
     .profile-header {
         grid-template-columns: 1fr;

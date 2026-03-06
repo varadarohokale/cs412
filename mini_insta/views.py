@@ -282,9 +282,18 @@ class PostFeedListView(ProfileLoginRequiredMixin, ListView):
         return profile.get_post_feed()
 
     def get_context_data(self, **kwargs):
-        """Add the logged in user's Profile to context for navigation links."""
+        """Add the logged in user's Profile and liked-post IDs to context."""
         context = super().get_context_data(**kwargs)
-        context["profile"] = self.get_user_profile()
+
+        # profile is the logged in user's Profile.
+        profile = self.get_user_profile()
+        context["profile"] = profile
+
+        # liked_post_ids is the set of Post IDs liked by this Profile.
+        context["liked_post_ids"] = set(
+            Like.objects.filter(profile=profile).values_list("post_id", flat=True)
+        )
+
         return context
 
 class SearchView(ProfileLoginRequiredMixin, ListView):
@@ -490,8 +499,16 @@ class LikePostView(ProfileLoginRequiredMixin, DetailView):
                     profile=logged_in_profile,
                 )
 
-        # After creating the Like, return to the Post page.
-        return redirect("show_post", pk=post.pk)
+        # After creating the Like, return to the feed page.
+        # next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
+        # return redirect(next_url)
+
+        next_url = request.GET.get("next")
+        if not next_url:
+            next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
+
+        return redirect(next_url)
+        
 
 
 class DeleteLikePostView(ProfileLoginRequiredMixin, DetailView):
@@ -515,4 +532,11 @@ class DeleteLikePostView(ProfileLoginRequiredMixin, DetailView):
         ).delete()
 
         # After deleting the Like, return to the Post page.
-        return redirect("show_post", pk=post.pk)
+        # next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
+        # return redirect(next_url)
+
+        next_url = request.GET.get("next")
+        if not next_url:
+            next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
+
+        return redirect(next_url)
