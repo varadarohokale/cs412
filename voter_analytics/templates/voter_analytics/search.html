@@ -5,12 +5,16 @@
     birth year range, voter score, and election participation.
 -->
 
+<!-- Display the filtering form used to restrict the voter records
+     or graphs shown on the page. -->
 <div class="form-box"> 
 <form action="" method="get">
     <table>
         <tr>
             <th>Party Affiliation:</th>
             <td>
+                <!-- Allow the user to filter voters by party
+                                         affiliation. -->
                 <select name="party_affiliation">
                     <option value="">All</option>
                     {% for party in party_choices %}
@@ -25,6 +29,8 @@
         <tr>
             <th>Minimum Birth Year:</th>
             <td>
+                <!-- Allow the user to choose the earliest birth
+                                         year to include in the results. -->
                 <select name="min_dob">
                     <option value="">Any</option>
                     {% for year in birth_years %}
@@ -39,6 +45,8 @@
         <tr>
             <th>Maximum Birth Year:</th>
             <td>
+                <!-- Allow the user to choose the latest birth
+                                         year to include in the results. -->
                 <select name="max_dob">
                     <option value="">Any</option>
                     {% for year in birth_years %}
@@ -53,6 +61,8 @@
         <tr>
             <th>Voter Score:</th>
             <td>
+                <!-- Allow the user to filter voters by voter
+                                         score. -->
                 <select name="voter_score">
                     <option value="">Any</option>
                     {% for score in voter_scores %}
@@ -89,6 +99,8 @@
         </tr>
 
         <tr>
+            <!-- Provide buttons to submit the selected filters
+                                 or clear all current filters. -->
             <td><input type="submit" value="Filter"></td>
             <td><a href="{{ clear_url }}">Clear Filters</a></td>
         </tr>

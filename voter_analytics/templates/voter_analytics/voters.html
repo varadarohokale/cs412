@@ -18,16 +18,7 @@
 <div class="pagination">
     {% if is_paginated %}
     {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}
-                    &party_affiliation={{ current_party_affiliation }}
-                    &min_dob={{ current_min_dob }}
-                    &max_dob={{ current_max_dob }}
-                    &voter_score={{ current_voter_score }}
-                    {% if current_v20state %}&v20state=on{% endif %}
-                    {% if current_v21town %}&v21town=on{% endif %}
-                    {% if current_v21primary %}&v21primary=on{% endif %}
-                    {% if current_v22general %}&v22general=on{% endif %}
-                    {% if current_v23town %}&v23town=on{% endif %}">
+    <a href="?page={{ page_obj.previous_page_number }}{% if current_query %}&{{ current_query }}{% endif %}">
         Previous
     </a>
     {% endif %}
@@ -38,16 +29,7 @@
     </span>
 
     {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}
-                    &party_affiliation={{ current_party_affiliation }}
-                    &min_dob={{ current_min_dob }}
-                    &max_dob={{ current_max_dob }}
-                    &voter_score={{ current_voter_score }}
-                    {% if current_v20state %}&v20state=on{% endif %}
-                    {% if current_v21town %}&v21town=on{% endif %}
-                    {% if current_v21primary %}&v21primary=on{% endif %}
-                    {% if current_v22general %}&v22general=on{% endif %}
-                    {% if current_v23town %}&v23town=on{% endif %}">
+    <a href="?page={{ page_obj.next_page_number }}{% if current_query %}&{{ current_query }}{% endif %}">
         Next
     </a>
     {% endif %}
@@ -55,34 +37,34 @@
 </div>
 
 <!-- Show the selected voter fields in a table. -->
-<div  class="table-box"> 
-<table border="1">
-    <tr>
-        <th>Name</th>
-        <th>Street Address</th>
-        <th>Date of Birth</th>
-        <th>Party</th>
-        <th>Voter Score</th>
-    </tr>
+<div class="table-box">
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Street Address</th>
+            <th>Date of Birth</th>
+            <th>Party</th>
+            <th>Voter Score</th>
+        </tr>
 
-    {% for voter in voters %}
-    <tr>
-        <td>
-            <a href="{% url 'voter' voter.pk %}">
-                {{ voter.first_name }} {{ voter.last_name }}
-            </a>
-        </td>
-        <td>
-            {{ voter.street_number }} {{ voter.street_name }}
-            {% if voter.apartment_number %}
-            Apt {{ voter.apartment_number }}
-            {% endif %}
-        </td>
-        <td>{{ voter.date_of_birth }}</td>
-        <td>{{ voter.party_affiliation }}</td>
-        <td>{{ voter.voter_score }}</td>
-    </tr>
-    {% endfor %}
-</table>
+        {% for voter in voters %}
+        <tr>
+            <td>
+                <a href="{% url 'voter' voter.pk %}">
+                    {{ voter.first_name }} {{ voter.last_name }}
+                </a>
+            </td>
+            <td>
+                {{ voter.street_number }} {{ voter.street_name }}
+                {% if voter.apartment_number %}
+                Apt {{ voter.apartment_number }}
+                {% endif %}
+            </td>
+            <td>{{ voter.date_of_birth }}</td>
+            <td>{{ voter.party_affiliation }}</td>
+            <td>{{ voter.voter_score }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}

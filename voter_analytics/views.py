@@ -106,7 +106,15 @@ class VoterListView(ListView):
         context["current_v23town"] = "v23town" in self.request.GET
 
         context["clear_url"] = "/voter_analytics/"
-        context["current_query"] = self.request.GET.urlencode()
+        
+        query_dict = self.request.GET.copy()
+
+        # Remove the existing page number so pagination links can add the
+        # new page number without duplicating the parameter.
+        if "page" in query_dict:
+            del query_dict["page"]
+
+        context["current_query"] = query_dict.urlencode()
 
         return context
 
@@ -348,6 +356,14 @@ class GraphsView(ListView):
         context["graph_div_election"] = graph_div_election
 
         context["clear_url"] = "/voter_analytics/graphs"
-        context["current_query"] = self.request.GET.urlencode()
+
+        query_dict = self.request.GET.copy()
+
+        # Remove the existing page number so pagination links can add the
+        # new page number without duplicating the parameter.
+        if "page" in query_dict:
+            del query_dict["page"]
+
+        context["current_query"] = query_dict.urlencode()
 
         return context

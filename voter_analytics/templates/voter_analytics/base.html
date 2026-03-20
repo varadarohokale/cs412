@@ -4,34 +4,43 @@
     Description: Base template for the voter_analytics application.
     This file provides shared page layout and navigation links.
 -->
+    
 {% load static %}
 <html>
 
 <head>
     <title>Voter Analytics</title>
+
+    <!-- Load the stylesheet used to format all pages in this app. -->
+    <link rel="stylesheet" href="{% static 'voters.css' %}">
 </head>
 
 <body>
+    <!-- Display the site heading and navigation links at the top
+         of every page. -->
     <header>
         <h1>Voter Analytics</h1>
-        <link rel="stylesheet" href="{% static 'voters.css' %}">
 
+        <!-- Provide navigation links to the voter list page and the
+             graphs page. Preserve the current query string so that
+             selected filters remain active when switching pages. -->
         <nav>
             <ul>
-            <li>
-                <a href="{% url 'voters' %}{% if current_query %}?{{ current_query }}{% endif %}">
-                    All Voters
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'graphs' %}{% if current_query %}?{{ current_query }}{% endif %}">
-                    Graphs
-                </a>
-            </li>
+                <li>
+                    <a href="{% url 'voters' %}{% if current_query %}?{{ current_query }}{% endif %}">
+                        All Voters
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'graphs' %}{% if current_query %}?{{ current_query }}{% endif %}">
+                        Graphs
+                    </a>
+                </li>
             </ul>
         </nav>
     </header>
 
+    <!-- Insert page-specific content from child templates here. -->
     {% block content %}
     {% endblock %}
 </body>
