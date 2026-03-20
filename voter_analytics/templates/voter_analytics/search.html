@@ -4,7 +4,9 @@
     Description: Search form for filtering the voter listing by party,
     birth year range, voter score, and election participation.
 -->
-<form action="{% url 'voters' %}" method="get">
+
+<div class="form-box"> 
+<form action="" method="get">
     <table>
         <tr>
             <th>Party Affiliation:</th>
@@ -12,7 +14,7 @@
                 <select name="party_affiliation">
                     <option value="">All</option>
                     {% for party in party_choices %}
-                    <option value="{{ party }}" {% if party==current_party_affiliation %} selected {% endif %}>
+                    <option value="{{ party }}" {% if party == current_party_affiliation %} selected {% endif %}>
                         {{ party }}
                     </option>
                     {% endfor %}
@@ -26,7 +28,7 @@
                 <select name="min_dob">
                     <option value="">Any</option>
                     {% for year in birth_years %}
-                    <option value="{{ year }}" {% if year|stringformat:"s"==current_min_dob %} selected {% endif %}>
+                    <option value="{{ year }}" {% if year|stringformat:"s" == current_min_dob %} selected {% endif %}>
                         {{ year }}
                     </option>
                     {% endfor %}
@@ -40,7 +42,7 @@
                 <select name="max_dob">
                     <option value="">Any</option>
                     {% for year in birth_years %}
-                    <option value="{{ year }}" {% if year|stringformat:"s"==current_max_dob %} selected {% endif %}>
+                    <option value="{{ year }}" {% if year|stringformat:"s" == current_max_dob %} selected {% endif %}>
                         {{ year }}
                     </option>
                     {% endfor %}
@@ -54,8 +56,7 @@
                 <select name="voter_score">
                     <option value="">Any</option>
                     {% for score in voter_scores %}
-                    <option value="{{ score }}" {% if score|stringformat:"s"==current_voter_score %} selected {% endif
-                        %}>
+                    <option value="{{ score }}" {% if score|stringformat:"s" == current_voter_score %} selected {% endif %}>
                         {{ score }}
                     </option>
                     {% endfor %}
@@ -63,7 +64,6 @@
             </td>
         </tr>
 
-        <!-- Allow the user to require participation in specific elections. -->
         <tr>
             <th>Voted in Elections:</th>
             <td>
@@ -90,7 +90,8 @@
 
         <tr>
             <td><input type="submit" value="Filter"></td>
-            <td><a href="{% url 'voters' %}">Clear Filters</a></td>
+            <td><a href="{{ clear_url }}">Clear Filters</a></td>
         </tr>
     </table>
 </form>
+</div>

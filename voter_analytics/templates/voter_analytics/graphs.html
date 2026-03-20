@@ -1,0 +1,31 @@
+<!--
+    File: graphs.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/20/2026
+    Description: Template for displaying aggregate graphs of voter
+    data and the filtering form used to restrict the graph results.
+-->
+{% extends "voter_analytics/base.html" %}
+
+{% block content %}
+<h2>Graphs of Voter Data</h2>
+
+<!-- Re-use the filtering form from task 2. -->
+<div>
+    {% include "voter_analytics/search.html" %}
+</div>
+
+<!-- Display the graph of voters by year of birth. -->
+<div class="graph-box">
+    {{ graph_div_year|safe }}
+</div>
+
+<!-- Display the graph of voters by party affiliation. -->
+<div class="graph-box">
+    {{ graph_div_party|safe }}
+</div>
+
+<!-- Display the graph of election participation counts. -->
+<div class="graph-box">
+    {{ graph_div_election|safe }}
+</div>
+{% endblock %}

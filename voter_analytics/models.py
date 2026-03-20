@@ -67,7 +67,7 @@ def load_data():
     Voter.objects.all().delete()
 
     # Store the path to the CSV file that contains the voter data.
-    filename = "/Users/azs/Desktop/newton_voters.csv"
+    filename = "/Users/varadarohokale/Downloads/newton_voters.csv"
 
     # Open the CSV file and use a DictReader so that fields can be
     # accessed by column name instead of numerical index.
@@ -95,7 +95,7 @@ def load_data():
                 date_of_registration=parse_date(
                     row["Date of Registration"]
                 ),
-                party_affiliation=row["Party Affiliation"],
+                party_affiliation=row["Party Affiliation"].strip(),
                 precinct_number=row["Precinct Number"],
                 v20state=parse_boolean(row["v20state"]),
                 v21town=parse_boolean(row["v21town"]),

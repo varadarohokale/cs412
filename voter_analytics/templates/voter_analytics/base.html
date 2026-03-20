@@ -14,11 +14,20 @@
 <body>
     <header>
         <h1>Voter Analytics</h1>
+        <link rel="stylesheet" href="{% static 'voters.css' %}">
 
-        <!-- Provide navigation links for the main pages. -->
         <nav>
             <ul>
-                <li><a href="{% url 'voters' %}">All Voters</a></li>
+            <li>
+                <a href="{% url 'voters' %}{% if current_query %}?{{ current_query }}{% endif %}">
+                    All Voters
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'graphs' %}{% if current_query %}?{{ current_query }}{% endif %}">
+                    Graphs
+                </a>
+            </li>
             </ul>
         </nav>
     </header>

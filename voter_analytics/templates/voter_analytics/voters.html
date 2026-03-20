@@ -15,7 +15,7 @@
 </div>
 
 <!-- Show page navigation links when pagination is active. -->
-<div>
+<div class="pagination">
     {% if is_paginated %}
     {% if page_obj.has_previous %}
     <a href="?page={{ page_obj.previous_page_number }}
@@ -55,6 +55,7 @@
 </div>
 
 <!-- Show the selected voter fields in a table. -->
+<div  class="table-box"> 
 <table border="1">
     <tr>
         <th>Name</th>
@@ -83,4 +84,5 @@
     </tr>
     {% endfor %}
 </table>
+</div>
 {% endblock %}
