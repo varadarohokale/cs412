@@ -1,10 +1,8 @@
 # File: models.py
-# Author: Varada Rohokale (YOUR_BU_EMAIL), 3/20/2026
+# Author: Varada Rohokale (vroho@bu.edu), 3/20/2026
 # Description: Model definitions and data-loading utilities for the
 # voter_analytics application. This file defines the Voter model and
 # includes a function for importing voter records from a CSV file.
-
-"""Define models and CSV import logic for the voter_analytics app."""
 
 import csv
 from datetime import datetime

@@ -1,0 +1,86 @@
+<!--
+    File: voters.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/20/2026
+    Description: Template for displaying the paginated voter listing
+    and the search form used to filter voter records.
+-->
+{% extends "voter_analytics/base.html" %}
+
+{% block content %}
+<h2>Voter Records</h2>
+
+<!-- Show the search form above the voter table. -->
+<div>
+    {% include "voter_analytics/search.html" %}
+</div>
+
+<!-- Show page navigation links when pagination is active. -->
+<div>
+    {% if is_paginated %}
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}
+                    &party_affiliation={{ current_party_affiliation }}
+                    &min_dob={{ current_min_dob }}
+                    &max_dob={{ current_max_dob }}
+                    &voter_score={{ current_voter_score }}
+                    {% if current_v20state %}&v20state=on{% endif %}
+                    {% if current_v21town %}&v21town=on{% endif %}
+                    {% if current_v21primary %}&v21primary=on{% endif %}
+                    {% if current_v22general %}&v22general=on{% endif %}
+                    {% if current_v23town %}&v23town=on{% endif %}">
+        Previous
+    </a>
+    {% endif %}
+
+    <span>
+        Page {{ page_obj.number }} of
+        {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}
+                    &party_affiliation={{ current_party_affiliation }}
+                    &min_dob={{ current_min_dob }}
+                    &max_dob={{ current_max_dob }}
+                    &voter_score={{ current_voter_score }}
+                    {% if current_v20state %}&v20state=on{% endif %}
+                    {% if current_v21town %}&v21town=on{% endif %}
+                    {% if current_v21primary %}&v21primary=on{% endif %}
+                    {% if current_v22general %}&v22general=on{% endif %}
+                    {% if current_v23town %}&v23town=on{% endif %}">
+        Next
+    </a>
+    {% endif %}
+    {% endif %}
+</div>
+
+<!-- Show the selected voter fields in a table. -->
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Street Address</th>
+        <th>Date of Birth</th>
+        <th>Party</th>
+        <th>Voter Score</th>
+    </tr>
+
+    {% for voter in voters %}
+    <tr>
+        <td>
+            <a href="{% url 'voter' voter.pk %}">
+                {{ voter.first_name }} {{ voter.last_name }}
+            </a>
+        </td>
+        <td>
+            {{ voter.street_number }} {{ voter.street_name }}
+            {% if voter.apartment_number %}
+            Apt {{ voter.apartment_number }}
+            {% endif %}
+        </td>
+        <td>{{ voter.date_of_birth }}</td>
+        <td>{{ voter.party_affiliation }}</td>
+        <td>{{ voter.voter_score }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

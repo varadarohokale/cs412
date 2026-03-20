@@ -1,0 +1,96 @@
+<!--
+    File: search.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/20/2026
+    Description: Search form for filtering the voter listing by party,
+    birth year range, voter score, and election participation.
+-->
+<form action="{% url 'voters' %}" method="get">
+    <table>
+        <tr>
+            <th>Party Affiliation:</th>
+            <td>
+                <select name="party_affiliation">
+                    <option value="">All</option>
+                    {% for party in party_choices %}
+                    <option value="{{ party }}" {% if party==current_party_affiliation %} selected {% endif %}>
+                        {{ party }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Minimum Birth Year:</th>
+            <td>
+                <select name="min_dob">
+                    <option value="">Any</option>
+                    {% for year in birth_years %}
+                    <option value="{{ year }}" {% if year|stringformat:"s"==current_min_dob %} selected {% endif %}>
+                        {{ year }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Maximum Birth Year:</th>
+            <td>
+                <select name="max_dob">
+                    <option value="">Any</option>
+                    {% for year in birth_years %}
+                    <option value="{{ year }}" {% if year|stringformat:"s"==current_max_dob %} selected {% endif %}>
+                        {{ year }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Voter Score:</th>
+            <td>
+                <select name="voter_score">
+                    <option value="">Any</option>
+                    {% for score in voter_scores %}
+                    <option value="{{ score }}" {% if score|stringformat:"s"==current_voter_score %} selected {% endif
+                        %}>
+                        {{ score }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <!-- Allow the user to require participation in specific elections. -->
+        <tr>
+            <th>Voted in Elections:</th>
+            <td>
+                <input type="checkbox" name="v20state" {% if current_v20state %}checked{% endif %}>
+                2020 State
+                <br>
+
+                <input type="checkbox" name="v21town" {% if current_v21town %}checked{% endif %}>
+                2021 Town
+                <br>
+
+                <input type="checkbox" name="v21primary" {% if current_v21primary %}checked{% endif %}>
+                2021 Primary
+                <br>
+
+                <input type="checkbox" name="v22general" {% if current_v22general %}checked{% endif %}>
+                2022 General
+                <br>
+
+                <input type="checkbox" name="v23town" {% if current_v23town %}checked{% endif %}>
+                2023 Town
+            </td>
+        </tr>
+
+        <tr>
+            <td><input type="submit" value="Filter"></td>
+            <td><a href="{% url 'voters' %}">Clear Filters</a></td>
+        </tr>
+    </table>
+</form>

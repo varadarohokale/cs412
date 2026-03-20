@@ -1,0 +1,30 @@
+<!--
+    File: base.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/20/2026
+    Description: Base template for the voter_analytics application.
+    This file provides shared page layout and navigation links.
+-->
+{% load static %}
+<html>
+
+<head>
+    <title>Voter Analytics</title>
+</head>
+
+<body>
+    <header>
+        <h1>Voter Analytics</h1>
+
+        <!-- Provide navigation links for the main pages. -->
+        <nav>
+            <ul>
+                <li><a href="{% url 'voters' %}">All Voters</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+</body>
+
+</html>

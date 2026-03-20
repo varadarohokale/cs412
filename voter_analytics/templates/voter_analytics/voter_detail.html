@@ -1,0 +1,106 @@
+<!--
+    File: voter_detail.html
+    Author: Varada Rohokale (vroho@bu.edu), 3/20/2026
+    Description: Template for displaying the detail page for one voter,
+    including all stored fields and a Google Maps address link.
+-->
+{% extends "voter_analytics/base.html" %}
+
+{% block content %}
+<h2>Voter Detail</h2>
+
+<!-- Provide a navigation link back to the voter listing page. -->
+<p>
+    <a href="{% url 'voters' %}">Back to All Voters</a>
+</p>
+
+<!-- Show all voter data fields in a readable table. -->
+<table border="1">
+    <tr>
+        <th>First Name</th>
+        <td>{{ voter.first_name }}</td>
+    </tr>
+
+    <tr>
+        <th>Last Name</th>
+        <td>{{ voter.last_name }}</td>
+    </tr>
+
+    <tr>
+        <th>Street Number</th>
+        <td>{{ voter.street_number }}</td>
+    </tr>
+
+    <tr>
+        <th>Street Name</th>
+        <td>{{ voter.street_name }}</td>
+    </tr>
+
+    <tr>
+        <th>Apartment Number</th>
+        <td>{{ voter.apartment_number }}</td>
+    </tr>
+
+    <tr>
+        <th>Zip Code</th>
+        <td>{{ voter.zip_code }}</td>
+    </tr>
+
+    <tr>
+        <th>Date of Birth</th>
+        <td>{{ voter.date_of_birth }}</td>
+    </tr>
+
+    <tr>
+        <th>Date of Registration</th>
+        <td>{{ voter.date_of_registration }}</td>
+    </tr>
+
+    <tr>
+        <th>Party Affiliation</th>
+        <td>{{ voter.party_affiliation }}</td>
+    </tr>
+
+    <tr>
+        <th>Precinct Number</th>
+        <td>{{ voter.precinct_number }}</td>
+    </tr>
+
+    <tr>
+        <th>Voted in 2020 State Election</th>
+        <td>{{ voter.v20state }}</td>
+    </tr>
+
+    <tr>
+        <th>Voted in 2021 Town Election</th>
+        <td>{{ voter.v21town }}</td>
+    </tr>
+
+    <tr>
+        <th>Voted in 2021 Primary Election</th>
+        <td>{{ voter.v21primary }}</td>
+    </tr>
+
+    <tr>
+        <th>Voted in 2022 General Election</th>
+        <td>{{ voter.v22general }}</td>
+    </tr>
+
+    <tr>
+        <th>Voted in 2023 Town Election</th>
+        <td>{{ voter.v23town }}</td>
+    </tr>
+
+    <tr>
+        <th>Voter Score</th>
+        <td>{{ voter.voter_score }}</td>
+    </tr>
+</table>
+
+<!-- Provide a Google Maps link for the voter's address. -->
+<p>
+    <a href="https://www.google.com/maps/search/{{ full_address }}" target="_blank">
+        View Address on Google Maps
+    </a>
+</p>
+{% endblock %}
