@@ -1,0 +1,29 @@
+/*
+    File: dadjokes.css
+    Author: Varada Rohokale (vroho@bu.edu), 4/3/2026
+    Description: Defines the shared styling for the dadjokes
+    web application templates.
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+}
+
+nav a {
+    margin-right: 15px;
+}
+
+.card {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+}
+
+.picture-image {
+width: 250px;
+    height: auto;
+    display: block;
+    margin-bottom: 12px;
+}

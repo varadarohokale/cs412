@@ -1,0 +1,22 @@
+<!--
+    File: pictures_list.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/3/2026
+    Description: Displays all pictures in the dadjokes app.
+-->
+{% extends "dadjokes/base.html" %}
+
+{% block content %}
+<h2>All Pictures</h2>
+
+{% for picture in pictures %}
+<div class="card">
+    <img src="{{ picture.image_url }}" alt="Funny picture" class="picture-image">
+    <p><strong>Contributor:</strong> {{ picture.contributor }}</p>
+    <p>
+        <a href="{% url 'picture' picture.pk %}">
+            View picture detail
+        </a>
+    </p>
+</div>
+{% endfor %}
+{% endblock %}

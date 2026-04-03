@@ -1,0 +1,22 @@
+<!--
+    File: jokes_list.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/3/2026
+    Description: Displays a list of all jokes in the dadjokes
+    application.
+-->
+{% extends "dadjokes/base.html" %}
+
+{% block content %}
+<h2>All Jokes</h2>
+
+<ul>
+    <!-- Loop through all jokes and display each one as a link to
+             its detail page. -->
+    {% for joke in jokes %}
+    <li>
+        <a href="{% url 'joke' joke.pk %}">{{ joke.text }}</a>
+        — {{ joke.contributor }}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

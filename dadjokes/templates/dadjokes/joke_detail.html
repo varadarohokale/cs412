@@ -1,0 +1,16 @@
+<!--
+    File: joke_detail.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/3/2026
+    Description: Displays the details of one selected joke.
+-->
+{% extends "dadjokes/base.html" %}
+
+{% block content %}
+<h2>Joke Detail</h2>
+
+<div class="card">
+    <p>{{ joke.text }}</p>
+    <p><strong>Contributor:</strong> {{ joke.contributor }}</p>
+    <p><strong>Created:</strong> {{ joke.created_at }}</p>
+</div>
+{% endblock %}

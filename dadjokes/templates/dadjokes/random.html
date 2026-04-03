@@ -1,0 +1,29 @@
+<!--
+    File: random.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/3/2026
+    Description: Displays one randomly selected joke and one randomly
+    selected picture.
+-->
+{% extends "dadjokes/base.html" %}
+
+{% block content %}
+<h2>Random Joke and Picture</h2>
+
+<!-- Display the joke only if one was provided in the context. -->
+{% if joke %}
+<div class="card">
+    <h3>Joke</h3>
+    <p>{{ joke.text }}</p>
+    <p><strong>Contributor:</strong> {{ joke.contributor }}</p>
+</div>
+{% endif %}
+
+<!-- Display the picture only if one was provided in the context. -->
+{% if picture %}
+<div class="card">
+    <h3>Picture</h3>
+    <img src="{{ picture.image_url }}" alt="Funny picture" class="picture-image">
+    <p><strong>Contributor:</strong> {{ picture.contributor }}</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+<!--
+    File: picture_detail.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/3/2026
+    Description: Displays the details of one selected picture.
+-->
+{% extends "dadjokes/base.html" %}
+
+{% block content %}
+<h2>Picture Detail</h2>
+
+<div class="card">
+    <img src="{{ picture.image_url }}" alt="Funny picture" class="picture-image">
+    <p><strong>Contributor:</strong> {{ picture.contributor }}</p>
+    <p><strong>Created:</strong> {{ picture.created_at }}</p>
+</div>
+{% endblock %}
