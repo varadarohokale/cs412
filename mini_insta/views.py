@@ -2,7 +2,10 @@
 # Author: Varada Rohokale (vroho@bu.edu), 3/1/2026
 # Description: Define class-based views for the mini_insta app.
 # Includes views for listing profiles, showing a single
-#  profile, showing a single post, and creating a post.
+# profile, showing a single post, creating a post and 
+# endpoints for reading profiles, reading posts for one
+# profile, reading a feed for one profile, and creating a Post.
+
 
 from django.urls import reverse
 from django.views.generic import CreateView, DetailView, ListView
@@ -14,8 +17,18 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from rest_framework import generics, status
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Photo, Post, Profile
+from .serializers import PostSerializer, ProfileSerializer
+from rest_framework import generics, status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class ProfileLoginRequiredMixin(LoginRequiredMixin):
     """Require login and provide helper methods for the logged in Profile."""
@@ -66,7 +79,7 @@ class ProfileDetailView(DetailView):
         # Begin by retrieving the default context dictionary from DetailView.
         context = super().get_context_data(**kwargs)
 
-        # This if-statement is necessary because follow/unfollow controls
+        # This follow/unfollow controls
         # should only appear when a user is authenticated.
         if self.request.user.is_authenticated:
             # logged_in_profile is the Profile associated with the
@@ -131,8 +144,7 @@ class PostDetailView(DetailView):
         # for navigation back to that Profile page.
         context["profile"] = self.get_object().profile
 
-        # This if-statement is necessary because like/unlike controls
-        # should only appear when a user is authenticated.
+        # like/unlike controls should only appear when a user is authenticated.
         if self.request.user.is_authenticated:
             # logged_in_profile is the Profile associated with the
             # authenticated Django User.
@@ -307,8 +319,7 @@ class SearchView(ProfileLoginRequiredMixin, ListView):
 
     def dispatch(self, request, *args, **kwargs):
         """Route requests to search form or results based on query presence."""
-        # This if-statement is necessary because the search form page
-        # should display when no query parameter is provided.
+        # The search form page should display when no query parameter is provided.
         if "query" not in self.request.GET:
             # profile_pk identifies which Profile is performing the search.
            
@@ -347,7 +358,7 @@ class SearchView(ProfileLoginRequiredMixin, ListView):
         # Posts results are already stored in context["posts"] via ListView.
         context["posts"] = context.get("posts", Post.objects.none())
 
-        # This if-statement is necessary to avoid returning all Profiles
+        # To avoid returning all Profiles
         # when the query is empty.
         if q:
             # Match Profiles where the query appears in username, display name, or bio.
@@ -432,8 +443,7 @@ class FollowProfileView(ProfileLoginRequiredMixin, DetailView):
         # logged_in_profile is the Profile of the authenticated user.
         logged_in_profile = self.get_user_profile()
 
-        # This if-statement is necessary because a Profile should not
-        # be allowed to follow itself.
+        # A Profile should not be allowed to follow itself.
         if logged_in_profile != other_profile:
             # Only create a Follow record if one does not already exist.
             if not Follow.objects.filter(
@@ -486,8 +496,7 @@ class LikePostView(ProfileLoginRequiredMixin, DetailView):
         # logged_in_profile is the Profile of the authenticated user.
         logged_in_profile = self.get_user_profile()
 
-        # This if-statement is necessary because a Profile should not
-        # be allowed to like its own Post.
+        # A Profile should not be allowed to like its own Post.
         if post.profile != logged_in_profile:
             # Only create a Like record if one does not already exist.
             if not Like.objects.filter(
@@ -500,9 +509,6 @@ class LikePostView(ProfileLoginRequiredMixin, DetailView):
                 )
 
         # After creating the Like, return to the feed page.
-        # next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
-        # return redirect(next_url)
-
         next_url = request.GET.get("next")
         if not next_url:
             next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
@@ -532,11 +538,259 @@ class DeleteLikePostView(ProfileLoginRequiredMixin, DetailView):
         ).delete()
 
         # After deleting the Like, return to the Post page.
-        # next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
-        # return redirect(next_url)
-
         next_url = request.GET.get("next")
         if not next_url:
             next_url = request.META.get("HTTP_REFERER", reverse("show_feed"))
 
         return redirect(next_url)
+
+class ProfileListAPIView(generics.ListAPIView):
+    """Return a JSON list of all Profile objects."""
+
+    queryset = Profile.objects.all().order_by("username")
+    serializer_class = ProfileSerializer
+
+
+class ProfileDetailAPIView(generics.RetrieveAPIView):
+    """Return JSON data for one Profile object."""
+
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
+class ProfilePostsAPIView(generics.ListAPIView):
+    """Return JSON posts created by one Profile, newest-first."""
+
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        """Return all Posts belonging to the requested Profile."""
+        # profile_pk identifies the Profile whose Posts are being requested.
+        profile_pk = self.kwargs["pk"]
+
+        # Reuse the existing model helper so the API stays consistent with
+        # the rest of the mini_insta application.
+        profile = Profile.objects.get(pk=profile_pk)
+        return profile.get_all_posts()
+
+    def get_serializer_context(self):
+        """Return serializer context including the current request."""
+        context = super().get_serializer_context()
+
+        # request is needed by PhotoSerializer to build absolute image URLs.
+        context["request"] = self.request
+
+        return context
+
+
+class ProfileFeedAPIView(APIView):
+    """Return JSON feed posts for one Profile, newest-first."""
+
+    def get(self, request, pk):
+        """Handle a GET request for one Profile's feed."""
+        # Reuse the existing feed logic already defined on the Profile model.
+        profile = Profile.objects.get(pk=pk)
+        feed_posts = profile.get_post_feed()
+
+        serializer = PostSerializer(
+            feed_posts,
+            many=True,
+            context={"request": request},
+        )
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CreatePostAPIView(APIView):
+    """Create a new Post and any uploaded Photo objects."""
+
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        """Handle a POST request to create a new Post."""
+        # profile_id identifies which Profile owns the new Post.
+        profile_id = request.data.get("profile")
+
+        # caption is optional, so default to the empty string.
+        caption = request.data.get("caption", "").strip()
+
+        # A Post cannot be created unless the client specifies the owning Profile.
+        if not profile_id:
+            return Response(
+                {"error": "profile is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # The supplied Profile id may not match any existing Profile record.
+        try:
+            profile = Profile.objects.get(pk=profile_id)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Create the Post first so Photo objects can reference it.
+        post = Post.objects.create(
+            profile=profile,
+            caption=caption,
+        )
+
+        # files contains 0..many uploaded images sent in multipart form data.
+        files = request.FILES.getlist("files")
+
+        # A single Post may have multiple Photos.
+        for uploaded_file in files:
+            Photo.objects.create(
+                post=post,
+                image_file=uploaded_file,
+            )
+
+        serializer = PostSerializer(
+            post,
+            context={"request": request},
+        )
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+
+class LoginAPIView(APIView):
+    """Handle API login by credentials and return an authentication token."""
+
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        """Authenticate the user and return token, user, and profile data."""
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
+
+        # Invalid credentials
+        # should not create a token or log in a user.
+        if user is None:
+            return Response(
+                {"error": "Invalid username or password."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        login(request, user)
+
+        # Get or create a token for the authenticated user.
+        token, created = Token.objects.get_or_create(user=user)
+
+        # This try/except block is here because every authenticated
+        # Django User should have a matching Profile, but a bad database
+        # state could violate that assumption.
+        try:
+            profile = Profile.objects.get(user=user)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "No Profile found for this user."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        profile_data = ProfileSerializer(profile).data
+
+        return Response(
+            {
+                "token": token.key,
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                },
+                "profile": profile_data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class AuthenticatedProfileAPIView(APIView):
+    """Return the Profile for the currently authenticated user."""
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Return the logged in user's Profile."""
+        profile = Profile.objects.get(user=request.user)
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AuthenticatedProfilePostsAPIView(APIView):
+    """Return Posts for the currently authenticated user's Profile."""
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Return the logged in user's Posts."""
+        profile = Profile.objects.get(user=request.user)
+        posts = profile.get_all_posts()
+        serializer = PostSerializer(
+            posts,
+            many=True,
+            context={"request": request},
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AuthenticatedProfileFeedAPIView(APIView):
+    """Return feed Posts for the currently authenticated user's Profile."""
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Return the logged in user's feed Posts."""
+        profile = Profile.objects.get(user=request.user)
+        feed_posts = profile.get_post_feed()
+
+        serializer = PostSerializer(
+            feed_posts,
+            many=True,
+            context={"request": request},
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AuthenticatedCreatePostAPIView(APIView):
+    """Create a new Post for the currently authenticated user's Profile."""
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request):
+        """Create a new Post and any uploaded Photo objects."""
+        profile = Profile.objects.get(user=request.user)
+        caption = request.data.get("caption", "").strip()
+
+        post = Post.objects.create(
+            profile=profile,
+            caption=caption,
+        )
+
+        # files contains 0..many uploaded images sent in multipart form data.
+        files = request.FILES.getlist("files")
+
+        # A single Post may contain
+        # multiple uploaded Photo objects.
+        for uploaded_file in files:
+            Photo.objects.create(
+                post=post,
+                image_file=uploaded_file,
+            )
+
+        serializer = PostSerializer(
+            post,
+            context={"request": request},
+        )
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

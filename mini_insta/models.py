@@ -132,7 +132,7 @@ class Photo(models.Model):
     # Date and time the photo was created.
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    # Uploaded image file stored in Django's MEDIA_ROOT (Assignment 5).
+    # Uploaded image file stored in Django's MEDIA_ROOT.
     image_file = models.ImageField(blank=True, null=True)
 
     def __str__(self):
@@ -146,7 +146,7 @@ class Photo(models.Model):
 
     def get_image_url(self):
         """Return the URL needed to display this Photo image."""
-        # This if/else structure is necessary for backwards compatibility:
+        # For backwards compatibility:
         # older records may only have image_url; newer records may use image_file.
         if self.image_url:
             return self.image_url

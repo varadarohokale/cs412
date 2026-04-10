@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "voter_analytics",
     'rest_framework',
     'dadjokes',
+    "rest_framework.authtoken",
     
 ]
 

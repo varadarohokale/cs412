@@ -55,6 +55,13 @@ urlpatterns = [
     path("post/<int:pk>/like", LikePostView.as_view(), name="like_post"),
     path("post/<int:pk>/delete_like", DeleteLikePostView.as_view(), name="delete_like_post"),
 
+    # REST API endpoints.
+    path("api/login/", LoginAPIView.as_view(), name="api_login"),
+    path("api/profile/", AuthenticatedProfileAPIView.as_view(), name="api_profile"),
+    path("api/profile/posts/", AuthenticatedProfilePostsAPIView.as_view(), name="api_profile_posts_auth"),
+    path("api/profile/feed/", AuthenticatedProfileFeedAPIView.as_view(), name="api_profile_feed_auth"),
+    path("api/post/create/", AuthenticatedCreatePostAPIView.as_view(),name="api_create_post_auth"),
+
     # Authentication views.
     path("login/", auth_views.LoginView.as_view(template_name="mini_insta/login.html"), name="login"),
     path("logout_confirmation/", logout_confirmation, name="logout_confirmation"),
