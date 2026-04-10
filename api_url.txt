@@ -1,1 +1,2 @@
 https://cs-webapps.bu.edu/vroho/dadjokes/api/
+https://cs-webapps.bu.edu/vroho/mini_insta/api/
