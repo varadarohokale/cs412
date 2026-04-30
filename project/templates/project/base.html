@@ -12,26 +12,26 @@
         <div class="main-header">
             <a class="logo" href="{% url 'product_list' %}">MINI SEPHORA</a>
 
-            <form class="search-bar" action="{% url 'product_list' %}" method="get">
-                <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search products or brands">
+        <form class="search-bar" action="{% url 'product_list' %}" method="get">
+            <input type="text" name="q" value="" placeholder="Search products or brands">
+        </form>
+
+        <div class="header-actions">
+            {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}">Hi, {{ user.username }}</a>
+        
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit">Log Out</button>
             </form>
-
-            <div class="header-actions">
-                {% if user.is_authenticated %}
-                <a href="{% url 'profile' %}">Hi, {{ user.username }}</a>
-                <a href="{% url 'cart' %}">🛒</a>
-                <form action="{% url 'logout' %}" method="post" class="logout-form">
-                    {% csrf_token %}
-                    <button type="submit">Log Out</button>
-                </form>
-                {% else %}
-                <a href="{% url 'login' %}">Sign In</a>
-                <a href="{% url 'signup' %}">Register</a>
-                {% endif %}
-
-                <a href="#">♡</a>
-                <a href="{% url 'cart' %}">🛒</a>
-            </div>
+            {% else %}
+            <a href="{% url 'login' %}">Sign In</a>
+            <a href="{% url 'signup' %}">Register</a>
+            {% endif %}
+        
+            <a href="{% url 'wishlist' %}">♡</a>
+            <a href="{% url 'cart' %}">🛒</a>
+        </div>
         </div>
 
         <nav class="category-nav">

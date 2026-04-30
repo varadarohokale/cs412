@@ -365,3 +365,38 @@ def update_cart_item(request, pk):
         request.session.modified = True
 
     return redirect('cart')
+
+
+class WishlistView(LoginRequiredMixin, TemplateView):
+    template_name = 'project/wishlist.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        wishlist = self.request.session.get('wishlist', [])
+        products = Product.objects.filter(id__in=wishlist)
+        context['products'] = products
+        return context
+
+
+def add_to_wishlist(request, pk):
+    wishlist = request.session.get('wishlist', [])
+
+    if pk not in wishlist:
+        wishlist.append(pk)
+
+    request.session['wishlist'] = wishlist
+    request.session.modified = True
+
+    return redirect('wishlist')
+
+
+def remove_from_wishlist(request, pk):
+    wishlist = request.session.get('wishlist', [])
+
+    if pk in wishlist:
+        wishlist.remove(pk)
+
+    request.session['wishlist'] = wishlist
+    request.session.modified = True
+
+    return redirect('wishlist')

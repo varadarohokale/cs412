@@ -38,4 +38,8 @@ path('orders/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
 
 path('orderitems/', OrderItemListView.as_view(), name='orderitem_list'),
 path('orderitems/<int:pk>/', OrderItemDetailView.as_view(), name='orderitem_detail'),
+
+path('wishlist/', WishlistView.as_view(), name='wishlist'),
+path('wishlist/add/<int:pk>/', add_to_wishlist, name='add_to_wishlist'),
+path('wishlist/remove/<int:pk>/', remove_from_wishlist, name='remove_from_wishlist'),
 ]

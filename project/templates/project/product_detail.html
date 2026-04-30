@@ -28,8 +28,11 @@
             <input type="number" id="quantity" name="quantity" value="1" min="1">
         
             <button type="submit" class="cart-button">Add to Cart</button>
+            <a class="wishlist-button" href="{% url 'add_to_wishlist' product.pk %}">
+                Add to Wishlist
+            </a>
         </form>
-        
+
     </div>
 </div>
 {% endblock %}
