@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'dadjokes',
     "rest_framework.authtoken",
+    "project",
     
 ]
 
@@ -146,3 +147,6 @@ if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
     STATIC_URL = '/vroho/static/'
     MEDIA_URL = '/vroho/media/'
 
+LOGIN_REDIRECT_URL = 'product_list'
+LOGOUT_REDIRECT_URL = 'product_list'
+LOGIN_URL = 'login'

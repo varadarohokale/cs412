@@ -1,0 +1,17 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>All Order Items</h2>
+
+{% for orderitem in orderitems %}
+<div class="card">
+    <a href="{% url 'orderitem_detail' orderitem.pk %}">
+        {{ orderitem.product.name }} x {{ orderitem.quantity }}
+    </a>
+    <p>Order: #{{ orderitem.order.pk }}</p>
+    <p>Subtotal: ${{ orderitem.subtotal }}</p>
+</div>
+{% empty %}
+<p>No order items found.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Order Confirmed</h2>
+
+<div class="profile-card">
+    <p>Thank you for your order!</p>
+    <p><strong>Order Number:</strong> #{{ order.pk }}</p>
+    <p><strong>Date:</strong> {{ order.order_date }}</p>
+    <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Total:</strong> ${{ order.total_price }}</p>
+</div>
+
+<a class="checkout-button" href="{% url 'profile' %}">View My Order History</a>
+{% endblock %}

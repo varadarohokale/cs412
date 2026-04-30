@@ -1,0 +1,26 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>My Profile</h2>
+
+<div class="profile-card">
+    <p><strong>Name:</strong> {{ customer.first_name }} {{ customer.last_name }}</p>
+    <p><strong>Email:</strong> {{ customer.email }}</p>
+    <p><strong>Address:</strong> {{ customer.address }}</p>
+    <p><strong>Phone:</strong> {{ customer.phone_number }}</p>
+</div>
+
+<h2>Order History</h2>
+
+{% for order in orders %}
+<div class="cart-item">
+    <p><strong>Order #{{ order.pk }}</strong></p>
+    <p>Date: {{ order.order_date }}</p>
+    <p>Status: {{ order.get_status_display }}</p>
+    <p>Total: ${{ order.total_price }}</p>
+    <a href="{% url 'order_confirmation' order.pk %}">View Order</a>
+</div>
+{% empty %}
+<p>You have not placed any orders yet.</p>
+{% endfor %}
+{% endblock %}

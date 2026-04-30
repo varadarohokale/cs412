@@ -1,0 +1,16 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>My Orders</h2>
+
+{% for order in orders %}
+<div class="card">
+    <a href="{% url 'order_detail' order.pk %}">Order #{{ order.pk }}</a>
+    <p>Date: {{ order.order_date }}</p>
+    <p>Status: {{ order.get_status_display }}</p>
+    <p>Total: ${{ order.total_price }}</p>
+</div>
+{% empty %}
+<p>You have not placed any orders yet.</p>
+{% endfor %}
+{% endblock %}

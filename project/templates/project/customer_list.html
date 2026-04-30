@@ -1,0 +1,16 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>All Customers</h2>
+
+{% for customer in customers %}
+<div class="card">
+    <a href="{% url 'customer_detail' customer.pk %}">
+        {{ customer.first_name }} {{ customer.last_name }}
+    </a>
+    <p>{{ customer.email }}</p>
+</div>
+{% empty %}
+<p>No customers found.</p>
+{% endfor %}
+{% endblock %}

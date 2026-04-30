@@ -1,0 +1,78 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+{% if selected_product_type %}
+<h2>{{ selected_product_type }}</h2>
+{% elif selected_category %}
+<h2>{{ selected_category|title }}</h2>
+{% elif search_query %}
+<h2>Search results for "{{ search_query }}"</h2>
+{% else %}
+<h2>Shop Beauty Products</h2>
+{% endif %}
+
+<div class="page-layout">
+    <aside class="filters">
+        <h3>Filters</h3>
+
+        <form method="get">
+            {% if selected_category %}
+            <input type="hidden" name="category" value="{{ selected_category }}">
+            {% endif %}
+
+            {% if selected_product_type %}
+            <input type="hidden" name="product_type" value="{{ selected_product_type }}">
+            {% endif %}
+
+            {% if search_query %}
+            <input type="hidden" name="q" value="{{ search_query }}">
+            {% endif %}
+
+            <label for="brand">Brand</label>
+            <select name="brand" id="brand">
+                <option value="">All Brands</option>
+                {% for brand in brands %}
+                <option value="{{ brand.id }}" {% if selected_brand == brand.id|stringformat:"s" %}selected{% endif %}>
+                    {{ brand.name }}
+                </option>
+                {% endfor %}
+        </select>
+
+            <label for="max_price">Max Price</label>
+            <input type="number" name="max_price" id="max_price" value="{{ selected_max_price }}" placeholder="100">
+
+            <button type="submit">Apply</button>
+            <a class="clear-link" href="{% url 'product_list' %}">Clear Filters</a>
+        </form>
+    </aside>
+
+    <section class="product-area">
+        <p class="result-count">{{ products|length }} products</p>
+
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                <div class="image-placeholder">No Image</div>
+                {% endif %}
+
+                <p class="brand-name">{{ product.brand.name }}</p>
+
+                <a class="product-name" href="{% url 'product_detail' product.pk %}">
+                    {{ product.name }}
+                </a>
+
+                <p class="product-type">{{ product.product_type }}</p>
+                <p class="price">${{ product.price }}</p>
+            </div>
+            {% empty %}
+            <p>No products found.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+{% endblock %}
