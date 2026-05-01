@@ -1,12 +1,21 @@
+<!--
+    File: wishlist.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/30/2026
+    Description: Displays the current user's saved wishlist products.
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
 <h2>My Wishlist</h2>
 
+<!-- Check this condition before displaying the related content. -->
 {% if products %}
 <div class="product-grid">
+    <!-- Loop through this collection and display each result. -->
     {% for product in products %}
     <div class="product-card">
+        <!-- Check this condition before displaying the related content. -->
         {% if product.image %}
         <img src="{{ product.image.url }}" alt="{{ product.name }}">
         {% endif %}
@@ -21,6 +30,7 @@
     </div>
     {% endfor %}
 </div>
+<!-- Display this alternative content when the condition is false. -->
 {% else %}
 <p>Your wishlist is empty.</p>
 {% endif %}

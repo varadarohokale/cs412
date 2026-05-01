@@ -1,12 +1,20 @@
+<!--
+    File: brand_list.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/30/2026
+    Description: Displays all brands in the store.
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
 <h2>All Brands</h2>
 
+<!-- Loop through this collection and display each result. -->
 {% for brand in brands %}
 <div class="card">
     <a href="{% url 'brand_detail' brand.pk %}">{{ brand.name }}</a>
 </div>
+<!-- Display this message when the loop has no results. -->
 {% empty %}
 <p>No brands found.</p>
 {% endfor %}

@@ -1,10 +1,18 @@
+<!--
+    File: cart.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/30/2026
+    Description: Displays cart items, quantity controls, totals, and checkout.
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
 <h2>My Cart</h2>
 
+<!-- Check this condition before displaying the related content. -->
 {% if cart_items %}
 <div class="cart-list">
+    <!-- Loop through this collection and display each result. -->
     {% for item in cart_items %}
     <div class="cart-item">
         <p><strong>{{ item.product.brand.name }}</strong></p>
@@ -12,6 +20,7 @@
         <p>Price: ${{ item.product.price }}</p>
 
         <div class="quantity-row">
+            <!-- Submit this form to the matching Django view. -->
             <form action="{% url 'update_cart_item' item.product.pk %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="decrease">
@@ -20,12 +29,14 @@
 
             <span>Quantity: {{ item.quantity }}</span>
 
+            <!-- Submit this form to the matching Django view. -->
             <form action="{% url 'update_cart_item' item.product.pk %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="increase">
                 <button type="submit">+</button>
             </form>
 
+            <!-- Submit this form to the matching Django view. -->
             <form action="{% url 'update_cart_item' item.product.pk %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="remove">
@@ -40,10 +51,12 @@
 
 <h3>Total: ${{ total }}</h3>
 
+<!-- Submit this form to the matching Django view. -->
 <form action="{% url 'checkout' %}" method="post">
     {% csrf_token %}
     <button type="submit" class="checkout-button">Checkout</button>
 </form>
+<!-- Display this alternative content when the condition is false. -->
 {% else %}
 <p>Your cart is empty.</p>
 {% endif %}

@@ -1,8 +1,15 @@
+<!--
+    File: customer_list.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/30/2026
+    Description: Displays all customers.
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
 <h2>All Customers</h2>
 
+<!-- Loop through this collection and display each result. -->
 {% for customer in customers %}
 <div class="card">
     <a href="{% url 'customer_detail' customer.pk %}">
@@ -10,6 +17,7 @@
     </a>
     <p>{{ customer.email }}</p>
 </div>
+<!-- Display this message when the loop has no results. -->
 {% empty %}
 <p>No customers found.</p>
 {% endfor %}

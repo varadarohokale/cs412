@@ -1,3 +1,9 @@
+<!--
+    File: profile.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/30/2026
+    Description: Displays customer profile information and order history.
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
@@ -12,6 +18,7 @@
 
 <h2>Order History</h2>
 
+<!-- Loop through this collection and display each result. -->
 {% for order in orders %}
 <div class="cart-item">
     <p><strong>Order #{{ order.pk }}</strong></p>
@@ -20,6 +27,7 @@
     <p>Total: ${{ order.total_price }}</p>
     <a href="{% url 'order_confirmation' order.pk %}">View Order</a>
 </div>
+<!-- Display this message when the loop has no results. -->
 {% empty %}
 <p>You have not placed any orders yet.</p>
 {% endfor %}

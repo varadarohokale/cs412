@@ -1,3 +1,9 @@
+<!--
+    File: product_detail.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/30/2026
+    Description: Displays detail information and cart actions for one product.
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
@@ -5,8 +11,10 @@
 
 <div class="product-detail-card">
     <div class="detail-image">
+        <!-- Check this condition before displaying the related content. -->
         {% if product.image %}
         <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <!-- Display this alternative content when the condition is false. -->
         {% else %}
         <div class="image-placeholder large">No Image</div>
         {% endif %}
@@ -21,6 +29,7 @@
         <p><strong>Shade:</strong> {{ product.shade }}</p>
         <p class="price">${{ product.price }}</p>
 
+        <!-- Submit this form to the matching Django view. -->
         <form action="{% url 'add_to_cart' product.pk %}" method="post" class="add-cart-form">
             {% csrf_token %}
         

@@ -1,13 +1,23 @@
+<!--
+    File: product_list.html
+    Author: Varada Rohokale (vroho@bu.edu), 4/30/2026
+    Description: Displays products with category, search, brand, and price filters.
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
 
+<!-- Check this condition before displaying the related content. -->
 {% if selected_product_type %}
 <h2>{{ selected_product_type }}</h2>
+<!-- Check this alternate condition before displaying the content. -->
 {% elif selected_category %}
 <h2>{{ selected_category|title }}</h2>
+<!-- Check this alternate condition before displaying the content. -->
 {% elif search_query %}
 <h2>Search results for "{{ search_query }}"</h2>
+<!-- Display this alternative content when the condition is false. -->
 {% else %}
 <h2>Shop Beauty Products</h2>
 {% endif %}
@@ -16,15 +26,19 @@
     <aside class="filters">
         <h3>Filters</h3>
 
+        <!-- Submit this form to the matching Django view. -->
         <form method="get">
+            <!-- Check this condition before displaying the related content. -->
             {% if selected_category %}
             <input type="hidden" name="category" value="{{ selected_category }}">
             {% endif %}
 
+            <!-- Check this condition before displaying the related content. -->
             {% if selected_product_type %}
             <input type="hidden" name="product_type" value="{{ selected_product_type }}">
             {% endif %}
 
+            <!-- Check this condition before displaying the related content. -->
             {% if search_query %}
             <input type="hidden" name="q" value="{{ search_query }}">
             {% endif %}
@@ -32,6 +46,7 @@
             <label for="brand">Brand</label>
             <select name="brand" id="brand">
                 <option value="">All Brands</option>
+                <!-- Loop through this collection and display each result. -->
                 {% for brand in brands %}
                 <option value="{{ brand.id }}" {% if selected_brand == brand.id|stringformat:"s" %}selected{% endif %}>
                     {{ brand.name }}
@@ -51,10 +66,13 @@
         <p class="result-count">{{ products|length }} products</p>
 
         <div class="product-grid">
+            <!-- Loop through this collection and display each result. -->
             {% for product in products %}
             <div class="product-card">
+                <!-- Check this condition before displaying the related content. -->
                 {% if product.image %}
                 <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <!-- Display this alternative content when the condition is false. -->
                 {% else %}
                 <div class="image-placeholder">No Image</div>
                 {% endif %}
@@ -68,6 +86,7 @@
                 <p class="product-type">{{ product.product_type }}</p>
                 <p class="price">${{ product.price }}</p>
             </div>
+            <!-- Display this message when the loop has no results. -->
             {% empty %}
             <p>No products found.</p>
             {% endfor %}
