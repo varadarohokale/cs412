@@ -10,12 +10,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic import (
-    CreateView,
-    DetailView,
-    ListView,
-    TemplateView,
-)
+from django.views.generic import *
 
 from .forms import CustomerSignUpForm
 from .models import Brand, Customer, Order, OrderItem, Product
