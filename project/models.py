@@ -1,31 +1,23 @@
 # File: models.py
-# Author: Varada Rohokale (vroho@bu.edu)
-# Description: Data models for the beauty retail web application project.
+# Author: Varada Rohokale (vroho@bu.edu), April 30, 2026
+# Description: Defines the data models for the beauty retail web application.
 
-
-from django.db import models
 from django.contrib.auth.models import User
-
+from django.db import models
 
 
 class Brand(models.Model):
-    """
-    Represents a beauty brand.
-    """
+    """Represent a beauty brand."""
 
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        """
-        Return a readable string representation of the brand.
-        """
+        """Return the brand name."""
         return self.name
 
 
 class Product(models.Model):
-    """
-    Represents a beauty product sold by a brand.
-    """
+    """Represent a beauty product sold in the store."""
 
     CATEGORY_CHOICES = [
         ('makeup', 'Makeup'),
@@ -44,19 +36,19 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product_images/', blank=True)
 
     def __str__(self):
-        """
-        Return a readable string representation of the product.
-        """
+        """Return the product name and brand."""
         return f"{self.name} ({self.brand.name})"
 
 
-
 class Customer(models.Model):
-    """
-    Represents a customer profile connected to a Django user account.
-    """
+    """Represent a customer profile linked to a Django user."""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
@@ -64,16 +56,12 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=20)
 
     def __str__(self):
-        """
-        Return a readable string representation of the customer.
-        """
+        """Return the customer's full name."""
         return f"{self.first_name} {self.last_name}"
 
 
 class Order(models.Model):
-    """
-    Represents a customer's order.
-    """
+    """Represent an order placed by a customer."""
 
     STATUS_CHOICES = [
         ('cart', 'Cart'),
@@ -87,16 +75,12 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
 
     def __str__(self):
-        """
-        Return a readable string representation of the order.
-        """
+        """Return the order number and customer."""
         return f"Order #{self.pk} - {self.customer}"
 
 
 class OrderItem(models.Model):
-    """
-    Represents a specific product within an order.
-    """
+    """Represent a product and quantity inside an order."""
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -104,7 +88,5 @@ class OrderItem(models.Model):
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        """
-        Return a readable string representation of the order item.
-        """
+        """Return the product name and quantity."""
         return f"{self.product.name} x {self.quantity}"

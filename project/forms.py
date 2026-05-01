@@ -1,17 +1,16 @@
 # File: forms.py
-# Author: Varada Rohokale (vroho@bu.edu)
-# Description: Forms for user authentication and customer profile creation.
+# Author: Varada Rohokale (vroho@bu.edu), April 30, 2026
+# Description: Defines forms for signup and customer profile creation.
 
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
 from .models import Customer
 
 
 class CustomerSignUpForm(UserCreationForm):
-    """
-    Form to create a Django user and related Customer profile.
-    """
+    """Create a Django user and matching customer profile."""
 
     first_name = forms.CharField(max_length=100)
     last_name = forms.CharField(max_length=100)
@@ -20,9 +19,8 @@ class CustomerSignUpForm(UserCreationForm):
     phone_number = forms.CharField(max_length=20)
 
     class Meta:
-        """
-        Connect this form to Django's built-in User model.
-        """
+        """Connect the signup form to Django's User model."""
+
         model = User
         fields = [
             'username',
@@ -36,17 +34,19 @@ class CustomerSignUpForm(UserCreationForm):
         ]
 
     def save(self, commit=True):
-        """
-        Save a new User and create a matching Customer profile.
-        """
+        """Save the User object and create a Customer object."""
         user = super().save(commit=False)
+
+        # Store signup form values on the Django user account.
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
         user.email = self.cleaned_data['email']
 
+        # Save to the database only after Django validates the form.
         if commit:
             user.save()
 
+            # Create the customer profile linked to the saved user.
             Customer.objects.create(
                 user=user,
                 first_name=self.cleaned_data['first_name'],
