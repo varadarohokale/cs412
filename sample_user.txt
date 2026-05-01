@@ -1,2 +1,2 @@
-Username : test
-Password : vara2004
+Username : test-user
+Password : p@ssw0rd#
